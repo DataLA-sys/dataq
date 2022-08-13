@@ -1,0 +1,15 @@
+<mat-toolbar>
+    <button mat-icon-button class="example-icon" (click)="save()" matTooltip="Save">
+      <mat-icon>save</mat-icon>
+    </button>
+</mat-toolbar>
+<div style="overflow: auto;height: 75vh;">
+    <div ace-editor 
+      #editor [(text)]="content" 
+      [mode]="'sql'" 
+      [theme]="'eclipse'" 
+      style="height:100%;" 
+      (textChanged)="onChange($event)"
+      [autoUpdateContent]="true"
+      [durationBeforeCallback]="300"></div>
+</div>

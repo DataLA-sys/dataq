@@ -1,0 +1,82 @@
+<mat-drawer-container>
+<mat-drawer #drawer mode="over" (openedStart)="openDrawer()">
+    <app-projects (onDrawerToggle)="drawer.toggle()"></app-projects>
+  </mat-drawer>
+  <mat-drawer-content>
+    <mat-toolbar>
+      <button mat-icon-button class="example-icon" (click)="drawer.toggle()" matTooltip="Open project">
+        <mat-icon>folder_open</mat-icon>
+      </button>
+      <button mat-icon-button class="example-icon" (click)="createNew()" matTooltip="Create new empty project">
+        <mat-icon>create_new_folder</mat-icon>
+      </button>
+      <button mat-icon-button class="example-icon" matTooltip="Copy project" (click)="copy()">
+        <mat-icon>folder_copy</mat-icon>
+      </button>
+      <button mat-icon-button class="example-icon" (click)="save()" matTooltip="Save">
+        <mat-icon>save</mat-icon>
+      </button>
+      <button mat-icon-button class="example-icon" (click)="delete()" matTooltip="Delete poject">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <input id="idname" [(ngModel)]="entity.name">
+      <span>&nbsp;</span>
+      <span>Data Quarry</span>
+      
+      <span class="example-spacer"></span>
+      <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+        <mat-icon>favorite</mat-icon>
+      </button>
+      <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+        <mat-icon>share</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <div fxLayout="row" fxLayoutGap="5px">
+      <div fxFlex="25" style="overflow: auto;height: 91vh;">
+        <app-step-list></app-step-list>
+      </div>
+      <div fxFlex>
+        <mat-tab-group (selectedIndexChange)="selectedIndexChange($event)" (selectedTabChange)="a($event)" [(selectedIndex)]="selectedTabIndex">
+          <mat-tab label="Graph">
+            <ng-template mat-tab-label>
+              <mat-icon (click)="centerGraph()">center_focus_strong</mat-icon>
+              <mat-icon (click)="fitGraph()">fit_screen</mat-icon>
+              Graph
+            </ng-template>
+            <div style="overflow: auto;height: 84vh;">  
+              <div fxLayout="column" style="width: 100%; height: 100%;" fxLayoutGap="5px">
+                <div fxFlex #graphContainer>
+                  <app-graph></app-graph>
+                </div>
+                <div fxFlex="40vh" style="background-color: #f5f5f5;">
+                  <app-step-props></app-step-props>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Options">
+            <div style="overflow: auto;height: 84vh;">
+              <app-options [entity]="entity"></app-options>
+            </div>
+          </mat-tab>
+          <mat-tab label="As json (readoly)">
+            <div style="overflow: auto;height: 84vh;">
+              <div ace-editor #editor [(text)]="filebody" [mode]="'json'" [theme]="'eclipse'" [readOnly]="true" style="height:100%;"></div>
+            </div>
+          </mat-tab>
+          <ng-template [ngIf]="openFiles.length > 0">
+          <mat-tab *ngFor="let file of openFiles" [label]="file" class="noprint">
+            <ng-template mat-tab-label>
+              <mat-icon (click)="closeFile(file)">close</mat-icon>
+              <mat-icon *ngIf="fileIsChanged(file)">circle</mat-icon>
+              {{file}}
+            </ng-template>
+            <app-open-file [file]="file"></app-open-file>
+          </mat-tab>
+          </ng-template>
+        </mat-tab-group>
+      </div>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

@@ -1,0 +1,147 @@
+{
+  "name": "Example1",
+  "steps": [
+    {
+      "name": "EmployeesAndDepartmens",
+      "in": [],
+      "opt": {
+        "name": "SparkSQL",
+        "opts": [
+          {
+            "option": "sqlfile",
+            "value": "EmployeesAndDepartmens.sql"
+          },
+          {
+            "option": "save",
+            "value": null
+          },
+          {
+            "option": "window",
+            "value": null
+          },
+          {
+            "option": "window2",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "Projects",
+      "in": [],
+      "opt": {
+        "name": "SparkSQL",
+        "opts": [
+          {
+            "option": "sqlfile",
+            "value": "Projects.sql"
+          },
+          {
+            "option": "save",
+            "value": null
+          },
+          {
+            "option": "window",
+            "value": null
+          },
+          {
+            "option": "window2",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "Pay",
+      "in": [
+        "EmployeesAndDepartmens"
+      ],
+      "opt": {
+        "name": "SparkSQL",
+        "opts": [
+          {
+            "option": "sqlfile",
+            "value": "Pay.sql"
+          },
+          {
+            "option": "save",
+            "value": null
+          },
+          {
+            "option": "window",
+            "value": null
+          },
+          {
+            "option": "window2",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "SpendOnProject",
+      "in": [
+        "Pay",
+        "AllProjectEmploeys"
+      ],
+      "opt": {
+        "name": "SparkSQL",
+        "opts": [
+          {
+            "option": "sqlfile",
+            "value": "SpendOnProject.sql"
+          },
+          {
+            "option": "save",
+            "value": null
+          },
+          {
+            "option": "window",
+            "value": null
+          },
+          {
+            "option": "window2",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "AllProjectEmploeys",
+      "in": [
+        "Projects"
+      ],
+      "opt": {
+        "name": "SparkSQL",
+        "opts": [
+          {
+            "option": "sqlfile",
+            "value": "AllProjectEmploeys.sql"
+          },
+          {
+            "option": "save",
+            "value": null
+          },
+          {
+            "option": "window",
+            "value": null
+          },
+          {
+            "option": "window2",
+            "value": null
+          }
+        ]
+      }
+    }
+  ],
+  "options": [
+    {
+      "name": "f",
+      "value": ""
+    },
+    {
+      "name": "d1",
+      "value": ""
+    }
+  ]
+}

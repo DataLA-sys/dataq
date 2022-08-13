@@ -1,0 +1,49 @@
+{
+  "name": "fullExample",
+  "steps": [
+    {
+      "name": "Step1",
+      "in": [
+        "Step2",
+        "Step3"
+      ],
+      "opt": {}
+    },
+    {
+      "name": "Step2",
+      "in": [],
+      "opt": {}
+    },
+    {
+      "name": "Step3",
+      "in": [],
+      "opt": {}
+    },
+    {
+      "name": "Step4",
+      "in": [
+        "Step1",
+        "Step5"
+      ],
+      "opt": {}
+    },
+    {
+      "name": "Step5",
+      "in": [
+        "Step6",
+        "Step7"
+      ],
+      "opt": {}
+    },
+    {
+      "name": "Step6",
+      "in": [],
+      "opt": {}
+    },
+    {
+      "name": "Step7",
+      "in": [],
+      "opt": {}
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+@import 'material-icons/iconfont/material-icons.css';
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+mat-grid-tile {
+  background: lightblue;
+}
+
+.example-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}

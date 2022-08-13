@@ -1,0 +1,13 @@
+<mat-toolbar>
+  <button mat-icon-button (click)="add()">
+    <mat-icon>add</mat-icon>
+  </button>
+  <button mat-icon-button (click)="rm()">
+    <mat-icon>remove</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-selection-list #listSteps [multiple]="false" (selectionChange)="onSelection($event, listSteps.selectedOptions)">
+  <mat-list-option *ngFor="let step of steps" [selected]="step === selected" [value]="step">
+    {{step.name}}
+  </mat-list-option>
+</mat-selection-list>

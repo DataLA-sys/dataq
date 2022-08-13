@@ -1,0 +1,46 @@
+<form>
+    <datalist id="datalist">
+        <option *ngFor="let file of files" value="{{file}}">
+    </datalist>
+    <h2>Options</h2>
+    <ng-container *ngIf="step">
+        <div fxLayot="row" fxLayoutGap="5px" style="margin-bottom: 5px;">
+            <div fxFlex="20">
+                <label for="selectType">Type</label>
+            </div>
+            <div fxFlex>
+                <select name="selectType" [(ngModel)]="step.opt.name" (ngModelChange)="modelChangeFn($event)">
+                    <option *ngFor="let o of optsTypes" [ngValue]="o.name">{{o.name}}</option>
+                </select>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="optsControl">
+    <div [formGroup]="optsControl">
+        <div formArrayName="opt">  
+            <div *ngFor="let o of opt.controls; let i=index" fxLayot="row" fxLayoutGap="5px" style="margin-bottom: 5px;">
+                <div fxFlex="20">
+                    <label for="o-{{i}}">{{labels[i]}}</label>
+                </div>
+                <div fxFlex>
+                    <ng-container [ngSwitch]="types[i]">
+                        <ng-container *ngSwitchCase="'string'">
+                            <input list="datalist" type="text" id="o-{{i}}" [formControlName]="i" style="width: 80%;" autocomplete="off">
+                            <ng-container *ngIf="labels[i].includes('file')">
+                                <button mat-icon-button class="example-icon" (click)="openFile(o.value)">
+                                    <mat-icon>file_open</mat-icon>
+                                </button>
+                                <button mat-icon-button class="example-icon" (click)="deleteFile(o.value)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </ng-container>
+                        </ng-container>
+                        <input *ngSwitchCase="'boolean'" type="checkbox" id="o-{{i}}" [formControlName]="i">
+                        <input *ngSwitchCase="'number'"  type="number" id="o-{{i}}" [formControlName]="i">
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+    </ng-container>
+</form>

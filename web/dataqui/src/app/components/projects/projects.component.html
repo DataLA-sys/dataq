@@ -1,0 +1,5 @@
+<mat-nav-list>
+    <mat-list-item *ngFor="let project of projects">
+      <a matLine [routerLink]="null" (click)="loadProject(project)">{{ project }}</a>
+    </mat-list-item>
+</mat-nav-list>

@@ -1,0 +1,5 @@
+select t.eid, t.pid
+from
+db.project_team_t t, db.Projects p
+where
+t.pid = p.id

@@ -1,0 +1,35 @@
+<ngx-graph
+  [view]="[x, y]"
+  layout="dagreCluster"
+  [links]="links"
+  [nodes]="nodes"
+  [clusters]="this.showClusters ? clusters : []"
+  [showMiniMap]="showMiniMap"
+  [zoomToFit$]="zoomToFit$"
+  [panToNode$]="panToNode$"
+  [center$]="center$"  
+  >
+<ng-template #nodeTemplate let-node>
+    <svg:g class="node-group ng-star-inserted">
+        <image [attr.href]="node.data.image" height="40" width="40" fill="none" (click)="nodeClick(node)" fill="#a95963"/>
+        <ng-container *ngIf="checkIfSelected(node)">
+          <rect height="40" width="40" fill="none" style="stroke:gray; stroke-width:3;"/>
+        </ng-container>
+        <text class="name">{{ node.data.step.name }}</text>
+    </svg:g>
+</ng-template>
+
+<ng-template #clusterTemplate let-cluster>
+  <svg:g class="node cluster">
+    <image [attr.href]="cluster.data.image" height="100" width="100" fill="none"/>
+    <svg:rect
+      rx="5"
+      ry="5"
+      [attr.width]="cluster.dimension.width"
+      [attr.height]="cluster.dimension.height"
+      [attr.fill]="cluster.data.color"
+    />
+  </svg:g>
+</ng-template>
+
+</ngx-graph>

@@ -1,0 +1,21 @@
+[
+          {
+            "name": "SparkSQL",
+            "opts": [
+              {"sqlfile": "string"},
+              {"save": "boolean"},
+              {"window": "number"},
+              {"window2": "number"},
+              {"views": [{"alias": "string", "files": "string", "type": "string"}]},
+              {"alwaysArray": ["string"]}
+            ]
+          },
+          {
+            "name": "jsonField",
+            "opts": [
+              {"sqlfile": "string"},
+              {"destTable": "string"},
+              {"code": "string"}
+            ]
+          }
+        ]

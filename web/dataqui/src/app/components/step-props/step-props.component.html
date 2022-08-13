@@ -1,0 +1,30 @@
+<ng-container *ngIf="step">
+  <div fxLayout="row" style="height: 100%;overflow-y: auto;margin-left: 5px;" fxLayoutGap="5px">
+    <div fxFlex="30" fxLayoutGap="5px">
+      <h2>Props</h2>
+      <label>Name</label>
+      <input name="stepName" [(ngModel)]="step.name">
+      <br>
+      in
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>add</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item *ngFor="let s of filtered()" (click)="addIn(s)">
+          <mat-icon>dialpad</mat-icon>
+          <span>{{s.name}}</span>
+        </button>
+      </mat-menu>
+
+      <button mat-icon-button (click)="rmIn(selectedStep)">
+        <mat-icon>remove</mat-icon>
+      </button>
+      <select size="10" style="width: 100%;" [(ngModel)]="selectedStep">
+        <option *ngFor="let i of step.in" [ngValue]="i">{{i.name}}</option>
+      </select>
+    </div>
+    <div fxFlex>
+      <app-step-opts [step]="step"></app-step-opts>
+    </div>
+  </div>
+</ng-container>
