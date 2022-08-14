@@ -45,6 +45,7 @@ export class FileSaved implements Event{
         this.name = name;
     }
 }
+export class MainSave implements Event {}
 
 @Injectable({ providedIn: 'root' })
 export class EventsService {

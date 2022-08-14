@@ -1,5 +1,5 @@
 select e.*, d.name deparment
 from
- db.departments_t d, db.employee_t e
+ dep d, employee e
 where
  d.id = e.depid

@@ -1,6 +1,6 @@
 select 
-e.eid, pay.pay
+e.id eid, pay.pay
 from
-db.pay_t pay, db.EmployeesAndDepartmens e
+PaySource pay, EmpAndDeps e
 where
-pay.eid = e.eid
+pay.eid = e.id

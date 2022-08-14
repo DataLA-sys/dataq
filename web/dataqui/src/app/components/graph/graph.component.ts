@@ -60,7 +60,13 @@ export class GraphComponent implements OnInit, OnChanges {
     if(this.selected && !this.entity.steps.includes(this.selected)){
       this.selected = undefined
     }
-    this.nodes = this.entity?.steps.map(step => {return {id: step.name, label: step.name, data: {image: "assets/dataset.ico", step: step}}}) || []
+    this.nodes = this.entity?.steps.map(step => {
+      return {
+        id: step.name, 
+        label: step.name, 
+        data: {image: this.entityService.getStepImage(step.opt.name), step: step}
+      }
+    }) || []
     let i = 0
     this.links = this.entity?.steps.filter(s => s.in.length > 0).flatMap(s => s.in.map(in_ => {return {id: i++, source: in_.name, target: s.name} })) || []
   }

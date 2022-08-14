@@ -2,12 +2,26 @@
           {
             "name": "SparkSQL",
             "opts": [
-              {"sqlfile": "string"},
-              {"save": "boolean"},
-              {"window": "number"},
-              {"window2": "number"},
-              {"views": [{"alias": "string", "files": "string", "type": "string"}]},
-              {"alwaysArray": ["string"]}
+              {"sqlfile": "string"}
+            ]
+          },
+          {
+            "name": "CsvSource",
+            "type": "source",
+            "opts": [
+              {"path": "string"},
+              {"delimeter": "string"},
+              {"fistRowAsColumnNames": "boolean"}
+            ]
+          },
+          {
+            "name": "ParquetTarget",
+            "type": "target",
+            "opts": [
+              {"path": "string"},
+              {"partitionBy": "string"},
+              {"repartition": "number"},
+              {"coalesce": "number"}
             ]
           },
           {

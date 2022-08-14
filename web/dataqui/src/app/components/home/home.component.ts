@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { EntityService } from 'src/app/services/entity.service';
-import { CenterGraph, EventsService, File, FileChanged, FileSaved, FitGraph, GraphSize, Refresh, RefreshProjects } from 'src/app/services/events.service';
+import { CenterGraph, EventsService, File, FileChanged, FileSaved, FitGraph, GraphSize, MainSave, Refresh, RefreshProjects } from 'src/app/services/events.service';
 import 'brace'
 import 'brace/mode/json'
 import 'brace/theme/eclipse'
@@ -106,7 +106,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   save() {
     this.entityService.save().subscribe(
-      s => alert("Saved!"),
+      s => {
+        this.eventService.emitEventEvent(new MainSave())
+        alert("Saved!")
+      },
       error => {
         alert(error.error)
         console.log(error)

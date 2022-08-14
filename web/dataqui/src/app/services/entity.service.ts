@@ -107,6 +107,17 @@ export class EntityService {
     
     options: any;
 
+    getStepImage(type: string): string {
+      if(type === "CsvSource") {
+        return "assets/csv.png"
+      }
+      if(type === "ParquetTarget") {
+        return "assets/icon--parquet.png"
+      }
+      
+      return "assets/sql.png"
+    }
+
     getOptType() {
       if(this.options !== undefined) {
         return of(this.options)

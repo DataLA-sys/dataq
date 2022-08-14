@@ -4,7 +4,7 @@ import 'brace'
 import 'brace/mode/sql'
 import 'brace/theme/eclipse'
 import * as ace from "ace-builds";
-import { EventsService, FileChanged, FileSaved } from 'src/app/services/events.service';
+import { EventsService, FileChanged, FileSaved, MainSave } from 'src/app/services/events.service';
 
 @Component({
   selector: 'app-open-file',
@@ -21,7 +21,11 @@ export class OpenFileComponent implements OnInit {
   aceEditor!: ace.Ace.Editor;
 
   constructor(private fileService: FilesService, private eventsService: EventsService) {
-    
+    this.eventsService.eventEvent$.subscribe(ev => {
+      if(ev instanceof MainSave) {
+        this.save()
+      }
+    })
   }
 
   content: any = "";
@@ -40,6 +44,9 @@ export class OpenFileComponent implements OnInit {
   }
 
   save() {
+    if(this.content == this.savedContent) {
+      return;
+    }
     this.fileService.save(this.file, this.content).subscribe(s => {
       this.eventsService.emitEventEvent(new FileSaved(this.file))
       this.savedContent = this.content

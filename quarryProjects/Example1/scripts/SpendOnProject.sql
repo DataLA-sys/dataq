@@ -1,7 +1,6 @@
-insert into db.projectSpend
 select ep.pid, sum(s.hours * pay.pay) as amount
 from
-db.Pay, db.AllProjectEmploeys ep, db.spend_t s
+Pay, AllProjEmpl ep, spend s
 where 
 ep.eid = pay.eid
 and
