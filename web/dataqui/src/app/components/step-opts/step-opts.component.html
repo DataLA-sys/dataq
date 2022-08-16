@@ -12,6 +12,12 @@
                 <select name="selectType" [(ngModel)]="step.opt.name" (ngModelChange)="modelChangeFn($event)">
                     <option *ngFor="let o of optsTypes" [ngValue]="o.name">{{o.name}}</option>
                 </select>
+                <button mat-icon-button class="example-icon" (click)="run()">
+                    <mat-icon>play_arrow</mat-icon>
+                </button>
+                <button mat-icon-button class="example-icon" (click)="printSchema()">
+                    <mat-icon>play_arrow</mat-icon>
+                </button>
             </div>
         </div>
     </ng-container>
@@ -25,7 +31,7 @@
                 <div fxFlex>
                     <ng-container [ngSwitch]="types[i]">
                         <ng-container *ngSwitchCase="'string'">
-                            <input list="datalist" type="text" id="o-{{i}}" [formControlName]="i" style="width: 80%;" autocomplete="off">
+                            <input list="datalist" type="text" id="o-{{i}}" [formControlName]="i" style="width: 80%;">
                             <ng-container *ngIf="labels[i].includes('file')">
                                 <button mat-icon-button class="example-icon" (click)="openFile(o.value)">
                                     <mat-icon>file_open</mat-icon>

@@ -9,24 +9,7 @@ import { EventsService, Refresh } from './events.service';
 export class EntityService {
     private entity = new Entity()
     constructor(private http: HttpClient, private eventsService: EventsService) {
-       this.loadExample()
-    }
-
-    private loadExample() {
-      this.entity.name = "justExampleNotSaved"
-      this.entity.steps.push(new Step(this.getStepUniqName()))
-      this.entity.steps.push(new Step(this.getStepUniqName()))
-      this.entity.steps.push(new Step(this.getStepUniqName()))
-      this.entity.steps.push(new Step(this.getStepUniqName()))
-      this.entity.steps.push(new Step(this.getStepUniqName()))
-      this.entity.steps.push(new Step(this.getStepUniqName()))
-      this.entity.steps.push(new Step(this.getStepUniqName()))
-      this.entity.steps[0].in.push(this.entity.steps[1])
-      this.entity.steps[0].in.push(this.entity.steps[2])
-      this.entity.steps[3].in.push(this.entity.steps[0])
-      this.entity.steps[3].in.push(this.entity.steps[4])
-      this.entity.steps[4].in.push(this.entity.steps[5])
-      this.entity.steps[4].in.push(this.entity.steps[6])
+       
     }
 
     getStepUniqName(): string  {
@@ -151,12 +134,16 @@ export class EntityService {
       })
     }
 
+    private loadNew() {
+      this.entity = new Entity()
+    }
+
     delete(name: string) {
       let opt: Object = {
         responseType: 'text' as 'json'
       }
       this.http.post<string>("./deleteProject?name=" + name, null, opt).subscribe(s => {
-        this.loadExample()
+        this.loadNew()
         this.eventsService.emitEventEvent(new Refresh())
       }, error => {
         console.error(error)

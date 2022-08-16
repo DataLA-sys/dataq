@@ -46,6 +46,12 @@ export class FileSaved implements Event{
     }
 }
 export class MainSave implements Event {}
+export class Run implements Event {
+    sh: string;
+    constructor(sh: string) {
+        this.sh = sh
+    }
+}
 
 @Injectable({ providedIn: 'root' })
 export class EventsService {

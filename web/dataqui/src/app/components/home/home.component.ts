@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         if(!this.openFiles.includes(ev.name)) {
           this.openFiles.push(ev.name)
         }
-        setTimeout(() => this.selectedTabIndex = 3 + this.openFiles.indexOf(ev.name), 100)
+        setTimeout(() => this.selectedTabIndex = 4 + this.openFiles.indexOf(ev.name), 100)
         
       }
       if(ev instanceof FileChanged) {

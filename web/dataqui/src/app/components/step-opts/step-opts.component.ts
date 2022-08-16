@@ -3,7 +3,7 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { Step } from 'src/app/classes/step';
 import { EntityService } from 'src/app/services/entity.service';
-import { EventsService, File, Refresh, UpdateFileList } from 'src/app/services/events.service';
+import { EventsService, File, Refresh, Run, UpdateFileList } from 'src/app/services/events.service';
 import { FilesService } from 'src/app/services/files.service';
 
 @Component({
@@ -133,9 +133,25 @@ export class StepOptsComponent implements OnInit, OnChanges {
   }
 
   deleteFile(file: string) {
-    if(prompt("Are you sure delete file " + file + "?")) {
+    if(confirm("Are you sure delete file " + file + "?")) {
       this.fileService.delete(file).subscribe(s => alert(s), error => {console.error(error); alert(error.error)})
+      this.opt.controls.forEach(c => {
+        if(c.value === file) {
+          c.setValue("")
+        }
+      })
+      this.eventsService.emitEventEvent(new UpdateFileList())
     }
+  }
+
+  run() {
+    let s ="sparkApp=" + this.entityService.getEntity().name + " stepTo=" + this.step_?.name
+    this.eventsService.emitEventEvent(new Run(s))
+  }
+
+  printShema() {
+    let s = "sparkApp=" + this.entityService.getEntity().name + "stepTo=" + this.step_?.name + " printSchema=true"
+    this.eventsService.emitEventEvent(new Run(s))
   }
 
 }

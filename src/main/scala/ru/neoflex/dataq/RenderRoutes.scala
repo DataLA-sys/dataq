@@ -13,7 +13,8 @@ import akka.pattern.StatusReply
 import akka.util.Timeout
 import org.json4s.DefaultFormats
 import ru.neoflex.dataq.actors.EntityActor.{CompleteEntityMessage, CompleteMessage, Copy, Delete, FileContent, FileContentMessage, FileCreateCommand, FileDeleteCommand, FileListCommand, FileListMessage, FileOpts, FileSaveCommand, GetEntityCommand, SaveCommand}
-import ru.neoflex.dataq.actors.{EntityActor, SourceFilesActor}
+import ru.neoflex.dataq.actors.SystemUtilActor.{CommandOutResult, GetOutCommand, RunCommand, RunCommandNoWait, RunCommandResult, SystemCommandResultMessage}
+import ru.neoflex.dataq.actors.{EntityActor, SourceFilesActor, SystemUtilActor}
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 import spray.json.DefaultJsonProtocol._
@@ -55,7 +56,9 @@ trait CORSHandler{
 
 }
 
-class RenderRoutes(sourceFilesActor: ActorRef[SourceFilesActor.FileCommand], entityActor: ActorRef[EntityActor.EntityCommand])
+class RenderRoutes(sourceFilesActor: ActorRef[SourceFilesActor.FileCommand],
+                   entityActor: ActorRef[EntityActor.EntityCommand],
+                   systemUtilActor: ActorRef[SystemUtilActor.SystemCommand])
                   (implicit val system: ActorSystem[_]) extends CORSHandler  {
 
   import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
@@ -130,6 +133,33 @@ class RenderRoutes(sourceFilesActor: ActorRef[SourceFilesActor.FileCommand], ent
               onComplete(entityActor
                 .askWithStatus(FileOpts(_: ActorRef[StatusReply[FileContentMessage]]))) {
                 case Success(EntityActor.FileContentMessage(value)) => complete(value)
+              }
+            },
+            path("runit") {
+              parameters("sh".as[String], "nowait".withDefault(false)) { (sh, nowait) =>
+                system.log.info("run: " + sh)
+                if(nowait) complete(
+                  systemUtilActor
+                    .ask(RunCommandNoWait(sh, _: ActorRef[SystemCommandResultMessage]))
+                    .map{
+                      case RunCommandResult(value, _) => Future(value)
+                    }) else complete(
+                  systemUtilActor
+                    .ask(RunCommand(sh, _: ActorRef[SystemCommandResultMessage]))
+                    .map {
+                      case RunCommandResult(value, _) => Future(value)
+                    })
+              }
+            },
+            path("sysout") {
+              parameters("runid".as[String]) { runId =>
+                complete(
+                  systemUtilActor
+                    .ask(GetOutCommand(runId, _: ActorRef[SystemCommandResultMessage]))
+                    .map {
+                      case CommandOutResult(commandId, stdOut, _) =>
+                        Future(stdOut)
+                    })
               }
             },
             path("hello") {

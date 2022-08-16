@@ -29,6 +29,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { AceEditorModule } from 'ng2-ace-editor';
 import 'material-icons/iconfont/material-icons.css';
@@ -40,6 +41,7 @@ import { StepOptsComponent } from './components/step-opts/step-opts.component';
 import { ProjectsComponent } from './components/projects/projects.component';
 import { OpenFileComponent } from './components/open-file/open-file.component';
 import { OptionsComponent } from './components/options/options.component';
+import { CommandsComponent } from './components/commands/commands.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,8 @@ import { OptionsComponent } from './components/options/options.component';
     StepOptsComponent,
     ProjectsComponent,
     OpenFileComponent,
-    OptionsComponent
+    OptionsComponent,
+    CommandsComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,
@@ -79,6 +82,7 @@ import { OptionsComponent } from './components/options/options.component';
     MatMenuModule,
     MatSidenavModule,
     MatTooltipModule,
+    MatAutocompleteModule,
     FlexLayoutModule,
     FormsModule,
     NgxGraphModule,

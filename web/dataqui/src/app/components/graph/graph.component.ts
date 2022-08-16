@@ -45,7 +45,7 @@ export class GraphComponent implements OnInit, OnChanges {
     this.eventService.eventEvent$.subscribe(ev => {
       if(ev instanceof GraphSize) {
         setTimeout(() => {
-          this.y = ev.h - 5;
+          this.y = ev.h - 7;
           this.x = ev.w;
         }, 100)
       }

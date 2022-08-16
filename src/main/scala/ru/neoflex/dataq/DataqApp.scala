@@ -4,7 +4,7 @@ import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
-import ru.neoflex.dataq.actors.{EntityActor, SourceFilesActor}
+import ru.neoflex.dataq.actors.{EntityActor, SourceFilesActor, SystemUtilActor, SystemUtilRunnerActor}
 
 import scala.util.Failure
 import scala.util.Success
@@ -37,10 +37,19 @@ object DataqApp {
           } else ""
         }
 
+        val systemUtilConfigFileName = {
+          if(args.length > 1) {
+            args(1)
+          } else "./commands.json"
+        }
+
         val filesActor = context.spawn(SourceFilesActor(), "SourceFilesActor")
         val entityActor = context.spawn(EntityActor(), "EntityActorActor")
+        val systemUtilRunnerActor = context.spawn(SystemUtilRunnerActor(systemUtilConfigFileName), "SystemUtilRunnerActor")
+        val systemUtilActor = context.spawn(SystemUtilActor(systemUtilConfigFileName, systemUtilRunnerActor), "SystemUtilActor")
 
-        val routes = new RenderRoutes(filesActor, entityActor)(context.system)
+
+        val routes = new RenderRoutes(filesActor, entityActor, systemUtilActor)(context.system)
         startHttpServer(routes.renderRoutes())(context.system)
 
         Behaviors.empty

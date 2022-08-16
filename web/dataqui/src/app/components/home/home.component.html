@@ -19,7 +19,7 @@
       <button mat-icon-button class="example-icon" (click)="delete()" matTooltip="Delete poject">
         <mat-icon>delete</mat-icon>
       </button>
-      <input id="idname" [(ngModel)]="entity.name">
+      <input id="idname" [(ngModel)]="entity.name" readonly>
       <span>&nbsp;</span>
       <span>Data Quarry</span>
       
@@ -64,6 +64,9 @@
             <div style="overflow: auto;height: 84vh;">
               <div ace-editor #editor [(text)]="filebody" [mode]="'json'" [theme]="'eclipse'" [readOnly]="true" style="height:100%;"></div>
             </div>
+          </mat-tab>
+          <mat-tab label="sh console">
+            <app-commands></app-commands>
           </mat-tab>
           <ng-template [ngIf]="openFiles.length > 0">
           <mat-tab *ngFor="let file of openFiles" [label]="file" class="noprint">
