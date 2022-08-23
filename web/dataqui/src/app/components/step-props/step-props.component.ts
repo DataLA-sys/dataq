@@ -1,4 +1,6 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Step } from 'src/app/classes/step';
 import { EntityService } from 'src/app/services/entity.service';
 import { EventsService, RedrawGraph, Refresh, StepSelect, UnSelect } from 'src/app/services/events.service';
@@ -9,7 +11,18 @@ import { EventsService, RedrawGraph, Refresh, StepSelect, UnSelect } from 'src/a
   styleUrls: ['./step-props.component.styl']
 })
 export class StepPropsComponent implements OnInit, OnChanges {
-  step: Step | undefined = undefined;
+  private step_: Step | undefined = undefined
+  forAdd: Step[] = []
+  get step(): Step | undefined {
+    return this.step_
+  }
+  set step(value: Step | undefined) {
+    this.step_ = value
+    this.steps = this.entityServis.getEntity().steps
+    this.selectedStep = undefined
+    this.test()
+  }
+
   steps: Step[];
  
   selectedStep: Step | undefined;
@@ -30,10 +43,49 @@ export class StepPropsComponent implements OnInit, OnChanges {
     this.steps = this.entityServis.getEntity().steps;
   }
 
+  private check(step: Step): Observable<boolean> {
+    if(step === this.step_) {
+      return of(false)
+    }
+    if(this.step_) {
+      if(this.step_.in.indexOf(step) > -1) {
+        return of(false)
+      }
+    }
+    return this.entityServis.getOptType().pipe(
+      map(opts => {
+        if(this.step) {
+          let add = opts.find((o:any)=>step.opt.name==o.name)
+          let myopt = opts.find((o:any)=>this.step?.opt.name==o.name)
+          if(add.type == "target") {
+            return false
+          }
+          if(myopt.type == "source") {
+            return false
+          }
+          if(myopt.type == "target") {
+            if(this.step?.in?.length > 0) {
+              return false
+            }
+          }
+          return true
+        }
+        return false
+      }))
+  }
+
+  private test() {
+    this.forAdd = []
+    this.steps.forEach(s => this.check(s).subscribe(b => {if(b === true) {
+      this.forAdd.push(s)
+    }}))
+  }
+
   addIn(step: Step) {
     if(this.step) {
       this.step.in.push(step)
       this.eventService.emitEventEvent(new RedrawGraph())
+      this.test()
     }
   }
 
@@ -44,19 +96,16 @@ export class StepPropsComponent implements OnInit, OnChanges {
         this.step.in.splice(idx, 1)
         this.eventService.emitEventEvent(new RedrawGraph())
       }
+      this.test()
     }
   }
 
-  filtered(): Step[] {
-    return this.steps.filter(s => !(s === this.step || this.step?.in.includes(s)))
-  }
-
   ngOnInit(): void {
+    
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // changes.prop contains the old and the new value...
-    console.log(changes)
+
   }
 
 }

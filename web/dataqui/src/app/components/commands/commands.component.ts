@@ -1,6 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { EventsService, Run } from 'src/app/services/events.service';
-import { Command, SysutilService, RunOperator } from 'src/app/services/sysutil.service';
+import { SysutilService, RunOperator } from 'src/app/services/sysutil.service';
 
 
 @Component({
@@ -10,15 +10,18 @@ import { Command, SysutilService, RunOperator } from 'src/app/services/sysutil.s
 })
 export class CommandsComponent implements OnInit {
 
-  commands: RunOperator[] = []
-  configCommands: Command[] = []
+  @Input()
+  step: string | undefined;
+
+  run?: RunOperator = undefined
   runit: string = ""
   
   constructor(private sysutilService: SysutilService, private eventService: EventsService) { 
-    sysutilService.getConfigCommands().subscribe(c => this.configCommands = c)
     this.eventService.eventEvent$.subscribe(ev => {
       if(ev instanceof Run) {
-        this.runit = ev.sh
+        if(ev.step == this.step) {
+          this.runit = ev.sh
+        }
       }
     })
   }
@@ -26,23 +29,21 @@ export class CommandsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  runIt(shcommand: string) {
-    this.sysutilService.runShCommand(shcommand).subscribe(value => {
-      this.commands = []
-      this.commands = this.sysutilService.commands;
-    })
+  filter(text: string, filter: boolean = true): string {
+    if (!filter) {
+      return text
+    }
+    let textarray = text.split("\n")
+    return textarray
+      .filter(l => !l.includes(" INFO ")) 
+      .filter(l => !l.includes(" DEBUG "))
+      .filter(l => !l.includes(" WARN ")).join("\n")
   }
 
-  addToConfig() {
-    let name = prompt("New command name:")
-    if(name != null) {
-      let newCommand = new Command()
-      newCommand.name = name
-      newCommand.template = this.runit
-      this.configCommands.push(newCommand)
-      this.sysutilService.saveConfigCommands(this.configCommands)
-        .subscribe(v => this.sysutilService.getConfigCommands().subscribe(c => this.configCommands = c))
-    }
+  runIt(shcommand: string) {
+    this.sysutilService.runShCommand(shcommand).subscribe(value => {
+      this.run = this.sysutilService.commands.find(c => c.runid == value);
+    })
   }
 
   refreshlog(command: RunOperator) {

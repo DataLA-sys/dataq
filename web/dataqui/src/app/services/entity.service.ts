@@ -97,6 +97,12 @@ export class EntityService {
       if(type === "ParquetTarget") {
         return "assets/icon--parquet.png"
       }
+      if(type === "ParquetSource") {
+        return "assets/icon--parquet.png"
+      }
+      if(type === "JDBCSource") {
+        return "assets/linkedTable.png"
+      }
       
       return "assets/sql.png"
     }

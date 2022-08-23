@@ -12,7 +12,9 @@
     {
       "name": "Step2",
       "in": [],
-      "opt": {}
+      "opt": {
+        "name": "JDBCSource"
+      }
     },
     {
       "name": "Step3",
@@ -45,5 +47,6 @@
       "in": [],
       "opt": {}
     }
-  ]
+  ],
+  "options": []
 }

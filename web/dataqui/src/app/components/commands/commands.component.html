@@ -1,45 +1,33 @@
-<mat-accordion class="example-headers-align">
-  <mat-expansion-panel>
+
+  <mat-expansion-panel expanded="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
           Sh command to run
       </mat-panel-title>
     </mat-expansion-panel-header>
     <p matLine>
-      <input type="text" size="120" [(ngModel)]="runit" [matAutocomplete]="auto">
-      <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let command of configCommands" [value]="command.template">
-          {{command.name + ": " + command.template}}
-        </mat-option>
-      </mat-autocomplete>
-      <button mat-button color="basic" matTooltip="Save this command" (click)="addToConfig()">
-        <mat-icon>add</mat-icon>
+      <input type="text" size="120" [(ngModel)]="runit" autocomplete="on">
+      <button mat-button color="basic" matTooltip="Run this command" (click)="runIt(runit)">
+        <mat-icon>play_arrow</mat-icon>
       </button>      
     </p>
-    <mat-action-row>
-      <button mat-button color="basic" matTooltip="Run this command" (click)="runIt(runit)">
-          Run
-          <mat-icon>play_arrow</mat-icon>
-      </button>
-    </mat-action-row>
   </mat-expansion-panel>  
-  <mat-expansion-panel *ngFor="let command of commands">
+  <mat-expansion-panel *ngIf="run" expanded="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
-          {{command.shCommand}}
+          {{run.shCommand}}
       </mat-panel-title>
     </mat-expansion-panel-header>
     <p matLine>
-      {{command.runid}}
+      {{run.runid}}
     </p>
     <p matLine>
-      <textarea cols="60" rows="6" disabled>{{command.log}}</textarea>        
+      <textarea cols="160" rows="20" disabled>{{filter(run.log)}}</textarea>        
     </p>
     <mat-action-row>
-      <button mat-button color="basic" (click)="refreshlog(command)">
+      <button mat-button color="basic" (click)="refreshlog(run)">
           Refresh
           <mat-icon>autorenew</mat-icon>
       </button>
     </mat-action-row>
   </mat-expansion-panel>
-<mat-accordion>

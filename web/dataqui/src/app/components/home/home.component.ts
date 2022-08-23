@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { EntityService } from 'src/app/services/entity.service';
-import { CenterGraph, EventsService, File, FileChanged, FileSaved, FitGraph, GraphSize, MainSave, Refresh, RefreshProjects } from 'src/app/services/events.service';
+import { CenterGraph, EventsService, StepFile, StepFileChanged, StepFileSaved, FitGraph, GraphSize, MainSave, Refresh, RefreshProjects } from 'src/app/services/events.service';
 import 'brace'
 import 'brace/mode/json'
 import 'brace/theme/eclipse'
@@ -16,8 +16,8 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 })
 export class HomeComponent implements OnInit, AfterViewInit {
   filebody: any = ""
-  openFiles: string[] = []
-  filesChanged: string[] = []
+  openFiles: StepFile[] = []
+  filesChanged: StepFileChanged[] = []
   selectedTabIndex = 0;
   
   selectedIndexChange(event: number) {
@@ -46,32 +46,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.entity = entityService.getEntity()
         this.filebody = this.entityService.getAsJson()
       }
-      if(ev instanceof File) {
-        if(!this.openFiles.includes(ev.name)) {
-          this.openFiles.push(ev.name)
+      if(ev instanceof StepFile) {
+        let found = this.openFiles.find(f => f.name == ev.name && f.step == ev.step)
+        if(!found) {
+          this.openFiles.push(ev)
+          found = ev
         }
-        setTimeout(() => this.selectedTabIndex = 4 + this.openFiles.indexOf(ev.name), 100)
+        setTimeout(() => this.selectedTabIndex = 4 + this.openFiles.indexOf(found || new StepFile("", "")), 100)
         
       }
-      if(ev instanceof FileChanged) {
-        if(this.filesChanged.indexOf(ev.name) == -1) {
-          this.filesChanged.push(ev.name)
+      if(ev instanceof StepFileChanged) {
+        if(!this.filesChanged.find(f=>ev.name==f.name&&ev.step==f.step)) {
+          this.filesChanged.push(ev)
         }
       }
-      if(ev instanceof FileSaved) {
-        if(this.filesChanged.indexOf(ev.name) > -1) {
-          this.filesChanged.splice(this.filesChanged.indexOf(ev.name), 1)
+      if(ev instanceof StepFileSaved) {
+        let found = this.filesChanged.find(f=>ev.name==f.name&&ev.step==f.step)
+        if(found) {
+          this.filesChanged.splice(this.filesChanged.indexOf(found), 1)
         }
       }
     })
-  }
-
-  centerGraph() {
-    this.eventService.emitEventEvent(new CenterGraph())
-  }
-
-  fitGraph() {
-    this.eventService.emitEventEvent(new FitGraph())
   }
 
   @ViewChild('graphContainer') graphContainer: ElementRef | undefined;
@@ -136,15 +131,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  closeFile(fileName: string) {
-    this.openFiles.splice(this.openFiles.indexOf(this.openFiles.filter(f=>f===fileName)[0]), 1) 
-    if(this.filesChanged.indexOf(fileName) > -1) {
-      this.filesChanged.splice(this.filesChanged.indexOf(fileName), 1)
+  closeFile(file: StepFile) {
+    this.openFiles.splice(this.openFiles.indexOf(this.openFiles.filter(f=>f.name===file.name && f.step===file.step)[0]), 1)
+    let found = this.filesChanged.find(f=>f.name==file.name&&f.step==file.step)
+    if(found) {
+      this.filesChanged.splice(this.filesChanged.indexOf(found), 1)
     }
     this.selectedTabIndex = 0  
   }
 
-  fileIsChanged(file: string) {
-    return this.filesChanged.indexOf(file) != -1
+  stepFileIsChanged(file: StepFile): boolean {
+    let found = this.filesChanged.find(f=>f.name==file.name&&f.step==file.step)
+    return found != undefined
   }
 }

@@ -6,17 +6,16 @@
       <input name="stepName" [(ngModel)]="step.name">
       <br>
       in
-      <button mat-icon-button [matMenuTriggerFor]="menu">
+      <button mat-icon-button [matMenuTriggerFor]="menu" [disabled]="forAdd.length === 0">
         <mat-icon>add</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item *ngFor="let s of filtered()" (click)="addIn(s)">
-          <mat-icon>dialpad</mat-icon>
+        <button mat-menu-item *ngFor="let s of forAdd" (click)="addIn(s)">
           <span>{{s.name}}</span>
         </button>
       </mat-menu>
 
-      <button mat-icon-button (click)="rmIn(selectedStep)">
+      <button mat-icon-button [disabled]="selectedStep == undefined" (click)="rmIn(selectedStep)">
         <mat-icon>remove</mat-icon>
       </button>
       <select size="10" style="width: 100%;" [(ngModel)]="selectedStep">

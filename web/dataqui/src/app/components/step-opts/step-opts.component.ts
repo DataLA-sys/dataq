@@ -3,8 +3,9 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { Step } from 'src/app/classes/step';
 import { EntityService } from 'src/app/services/entity.service';
-import { EventsService, File, Refresh, Run, UpdateFileList } from 'src/app/services/events.service';
+import { EventsService, StepFile, Refresh, Run, UpdateFileList, RedrawGraph } from 'src/app/services/events.service';
 import { FilesService } from 'src/app/services/files.service';
+import { SettingService } from 'src/app/services/setting.service';
 
 @Component({
   selector: 'app-step-opts',
@@ -94,7 +95,8 @@ export class StepOptsComponent implements OnInit, OnChanges {
   }
 
  constructor(private fb: FormBuilder, private entityService: EntityService, 
-  private eventsService: EventsService, private fileService: FilesService) {
+  private eventsService: EventsService, private fileService: FilesService,
+  private settingsService: SettingService) {
     this.eventsService.eventEvent$.subscribe(ev => {
       if(ev instanceof Refresh){ this.step = undefined}
       if(ev instanceof UpdateFileList){ 
@@ -120,6 +122,7 @@ export class StepOptsComponent implements OnInit, OnChanges {
 
   modelChangeFn(l: any){
     this.setOptsName()
+    this.eventsService.emitEventEvent(new RedrawGraph())
   }
   get labels(): string[] {
     return this.usedOpts().flatMap((o: any) => Object.keys(o))
@@ -129,7 +132,9 @@ export class StepOptsComponent implements OnInit, OnChanges {
   }
 
   openFile(file: string) {
-    this.eventsService.emitEventEvent(new File(file))
+    if(this.step_) {
+      this.eventsService.emitEventEvent(new StepFile(file, this.step_.name))
+    }
   }
 
   deleteFile(file: string) {
@@ -145,13 +150,29 @@ export class StepOptsComponent implements OnInit, OnChanges {
   }
 
   run() {
-    let s ="sparkApp=" + this.entityService.getEntity().name + " stepTo=" + this.step_?.name
-    this.eventsService.emitEventEvent(new Run(s))
+    this.settingsService.getSettings().subscribe(st => {
+      let s = st.sparkSubmit + 
+      " " + st.projects + "/q.py" +
+      " sparkApp=" + st.projects + "/" + this.entityService.getEntity().name + "/" + this.entityService.getEntity().name + ".json" + 
+      " stepTo=" + this.step_?.name
+      if(this.step_) {
+        this.eventsService.emitEventEvent(new Run(s, this.step_?.name))
+      }
+    })
+    
   }
 
-  printShema() {
-    let s = "sparkApp=" + this.entityService.getEntity().name + "stepTo=" + this.step_?.name + " printSchema=true"
-    this.eventsService.emitEventEvent(new Run(s))
+  printSchema() {
+    this.settingsService.getSettings().subscribe(st => {
+      let s = st.sparkSubmit + 
+      " " + st.projects + "/q.py" +
+      " sparkApp=" + st.projects + "/" + this.entityService.getEntity().name + "/" + this.entityService.getEntity().name + ".json" + 
+      " stepTo=" + this.step_?.name + 
+      " printSchema=true"
+      if(this.step_) {
+        this.eventsService.emitEventEvent(new Run(s, this.step_?.name))
+      }
+    })
   }
 
 }

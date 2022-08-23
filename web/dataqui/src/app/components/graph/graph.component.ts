@@ -32,6 +32,7 @@ export class GraphComponent implements OnInit, OnChanges {
 
   fit() {
     this.zoomToFit$.next(true)
+    this.center$.next(true)
   }
 
   center() {
@@ -51,8 +52,8 @@ export class GraphComponent implements OnInit, OnChanges {
       }
       if(ev instanceof CenterGraph) { this.center() }
       if(ev instanceof FitGraph) { this.fit() }
+      if(ev instanceof Refresh) {this.fillGraphData()}
     })
-    this.eventService.eventEvent$.subscribe(ev => {if(ev instanceof Refresh) {this.fillGraphData()}})
   }
 
   fillGraphData() {

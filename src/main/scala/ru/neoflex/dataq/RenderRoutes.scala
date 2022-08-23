@@ -67,6 +67,7 @@ class RenderRoutes(sourceFilesActor: ActorRef[SourceFilesActor.FileCommand],
 
   implicit val formats: DefaultFormats.type = DefaultFormats
   private val projectsDir = system.settings.config.getString("my-app.system.quarryProjects")
+  private val sparkSubmit = system.settings.config.getString("my-app.spark.sparkSubmit")
 
   def assets: Route = {
     def redirectSingleSlash =
@@ -161,6 +162,16 @@ class RenderRoutes(sourceFilesActor: ActorRef[SourceFilesActor.FileCommand],
                         Future(stdOut)
                     })
               }
+            },
+            path("settings") {
+              val s = new File(projectsDir).getCanonicalPath
+              complete(
+                s"""
+                   |{
+                   |  "sparkSubmit": "$sparkSubmit",
+                   |  "projects": "$s"
+                   |}
+                   |""".stripMargin)
             },
             path("hello") {
               complete("Hello! I am alive!")

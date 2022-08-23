@@ -3,11 +3,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-export class Command {
-  name!: string;
-  template!: string;
-}
-
 export class RunOperator {
   shCommand!: string;
   runid!: string;
@@ -41,14 +36,6 @@ export class SysutilService {
     let params = new HttpParams().set("runid",  command.runid)
     params.append("runid",  command.runid)    
     return this.http.get("/sysout", { responseType: 'text', params })
-  }
-
-  getConfigCommands(): Observable<Command[]> {    
-    return this.http.get<Command[]>("/commandFile")
-  }
-
-  saveConfigCommands(data: any): Observable<any> {
-    return this.http.post<any>("/commandFile", data)    
   }
 
 }

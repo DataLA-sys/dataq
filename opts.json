@@ -15,10 +15,53 @@
             ]
           },
           {
+            "name": "JDBCSource",
+            "type": "source",
+            "opts": [
+              {"driver": "string"},
+              {"url": "string"},
+              {"dbtable": "string"},
+              {"user": "string"},
+              {"password": "string"},
+              {"query": "string"},
+              {"partitionColumn": "string"},
+              {"numPartitions": "number"},
+              {"queryTimeout": "number"},
+              {"fetchsize": "number"},
+              {"batchsize": "number"},
+              {"isolationLevel": "string"},
+              {"sessionInitStatement": "string"},
+              {"truncate": "boolean"},
+              {"cascadeTruncate": "string"},
+              {"createTableOptions": "string"},
+              {"createTableColumnTypes": "string"},
+              {"customSchema": "string"},
+              {"pushDownPredicate": "boolean"},
+              {"pushDownAggregate": "boolean"},
+              {"pushDownLimit": "boolean"},
+              {"pushDownTableSample": "boolean"},
+              {"keytab": "string"},
+              {"principal": "string"},
+              {"refreshKrb5Config": "boolean"},
+              {"connectionProvider": "string"}
+            ]
+          },
+          {
+            "name": "ParquetSource",
+            "type": "source",
+            "opts": [
+              {"path": "string"},
+              {"datetimeRebaseMode": "string"},
+              {"int96RebaseMode": "string"},
+              {"mergeSchema": "boolean"}
+            ]
+          },
+          {
             "name": "ParquetTarget",
             "type": "target",
             "opts": [
               {"path": "string"},
+              {"compression": "string"},
               {"partitionBy": "string"},
               {"repartition": "number"},
               {"coalesce": "number"}

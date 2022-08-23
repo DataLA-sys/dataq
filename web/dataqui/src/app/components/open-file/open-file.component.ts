@@ -4,7 +4,8 @@ import 'brace'
 import 'brace/mode/sql'
 import 'brace/theme/eclipse'
 import * as ace from "ace-builds";
-import { EventsService, FileChanged, FileSaved, MainSave } from 'src/app/services/events.service';
+import { EventsService, StepFileChanged, StepFileSaved, MainSave } from 'src/app/services/events.service';
+import { Step } from 'src/app/classes/step';
 
 @Component({
   selector: 'app-open-file',
@@ -17,6 +18,9 @@ export class OpenFileComponent implements OnInit {
 
   @Input()
   file!: string;
+  @Input()
+  step!: string;
+  
   events: string[] = []
   aceEditor!: ace.Ace.Editor;
 
@@ -48,7 +52,7 @@ export class OpenFileComponent implements OnInit {
       return;
     }
     this.fileService.save(this.file, this.content).subscribe(s => {
-      this.eventsService.emitEventEvent(new FileSaved(this.file))
+      this.eventsService.emitEventEvent(new StepFileSaved(this.file, this.step))
       this.savedContent = this.content
       this.events = []
       this.events.push("edit")
@@ -61,12 +65,12 @@ export class OpenFileComponent implements OnInit {
   onChange(event: any) {
     this.events.push("edit")
     if(this.events.length > 1) {
-      this.eventsService.emitEventEvent(new FileChanged(this.file))
+      this.eventsService.emitEventEvent(new StepFileChanged(this.file, this.step))
     }
     if(this.content == this.savedContent) {
       this.events = []
       this.events.push("save")
-      this.eventsService.emitEventEvent(new FileSaved(this.file))
+      this.eventsService.emitEventEvent(new StepFileSaved(this.file, this.step))
     }
   }
 

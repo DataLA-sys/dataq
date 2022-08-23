@@ -6,7 +6,7 @@ def stepBy(data, step, result):
     if step in result:
         return result
     result.insert(0, step)
-    print(step)
+    #print(step)
     for i in step["in"]:
         for s in data["steps"]:
             if s["name"] == i:
@@ -23,13 +23,13 @@ def findTargets(data):
                 if si == name:
                     i = i + 1
         if i == 0:
-            print("target " + name)
+            #print("target " + name)
             targets.append(step)
     return targets
 
 def fileSources(data):
     for step in data["steps"]:
-        print("source: " + step["name"])
+        #print("source: " + step["name"])
         if step["opt"]["name"] == "CsvSource":
             delimiter = ","
             path = ""
@@ -42,6 +42,18 @@ def fileSources(data):
                 if opt["option"] == "fistRowAsColumnNames":
                     header = opt["value"]
             spark.read.option("delimiter", delimiter).option("header", header).csv(path).createOrReplaceTempView(step["name"])
+        if step["opt"]["name"] == "JDBCSource":
+            url = ""
+            dbtabename =""
+            props = {}
+            for opt in step["opt"]["opts"]:
+                if opt["option"] == "url":
+                    url = opt["value"]
+                if opt["option"] == "dbtabename":
+                    dbtabename = opt["value"]
+                if opt["option"] != "dbtabename" and opt["option"] != "url":
+                    props[opt["option"]] = opt["value"]
+            spark.read.jdbc(url, dbtabename, properties=props).createOrReplaceTempView(step["name"])
 
 def arrangeSteps(data):
     arrange = []
@@ -66,7 +78,13 @@ def arrangeSteps(data):
                 noarrange.remove(step)
     return arrange
 
-print(sys.argv)
+def writeStep(stepTo):
+    if printSchema == True:
+        spark.sql("select * from " + stepTo).printSchema()
+    else:    
+        spark.sql("select * from " + stepTo).show(100)    
+
+#print(sys.argv)
 
 sparkApp = "/mnt/c/projects/sbtprojects/dataq/quarryProjects/Example1/Example1.json"
 stepTo = None
@@ -97,7 +115,7 @@ if stepTo != None:
     stepBy(data, step, steps)
     data["steps"] = steps
 
-print(data["name"])
+#print(data["name"])
 
 targets = findTargets(data)
 
@@ -113,8 +131,6 @@ for step in arrange:
                 sqlFile = opt["value"]
         spark.sql(open(sparkApp[:sparkApp.rfind("/")] + "/scripts/" + sqlFile, "r").read()).createOrReplaceTempView(step["name"])
 
-stepToTarget = False
-
 for target in targets:
     if target["opt"]["name"] == "ParquetTarget":
         if len(target["in"]) != 1:
@@ -123,18 +139,14 @@ for target in targets:
         for opt in target["opt"]["opts"]:
             if opt["option"] == "path":
                 path = opt["value"].replace("C:", "file:/mnt/c")
-        if stepTo == target:
-            if printSchema == True:
-                spark.sql("select * from " + target["in"][0]).printSchema()
-            else:    
-                spark.sql("select * from " + target["in"][0]).show(100)
-        else:
-            spark.sql("select * from " + target["in"][0]).write.save(path)
+                                    
+        if stepTo == None:
+            spark.sql("select * from " + target["in"][0]).write.parquet(path)
 
-if stepTo != None and stepToTarget == False:
-    if printSchema == True:
-        spark.sql("select * from " + stepTo).printSchema()
-    else:    
-        spark.sql("select * from " + stepTo).show(100)
+        if stepTo == target["name"]:
+            stepTo = target["in"][0]
+
+if stepTo != None:
+    writeStep(stepTo)
 
 f.close()

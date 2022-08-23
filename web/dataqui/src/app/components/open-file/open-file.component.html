@@ -3,7 +3,7 @@
       <mat-icon>save</mat-icon>
     </button>
 </mat-toolbar>
-<div style="overflow: auto;height: 75vh;">
+<div style="overflow: auto;height: 50vh;">
     <div ace-editor 
       #editor [(text)]="content" 
       [mode]="'sql'" 
@@ -12,4 +12,7 @@
       (textChanged)="onChange($event)"
       [autoUpdateContent]="true"
       [durationBeforeCallback]="300"></div>
+</div>
+<div style="height: 25vh">
+   <app-commands [step]="step"></app-commands>
 </div>

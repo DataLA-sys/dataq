@@ -1,7 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Step } from 'src/app/classes/step';
 import { EntityService } from 'src/app/services/entity.service';
-import { EventsService, RedrawGraph, Refresh, StepSelect, UnSelect } from 'src/app/services/events.service';
+import { EventsService, RedrawGraph, Refresh, StepSelect, UnSelect } from 'src/app/services/events.service'
+import {DomSanitizer} from '@angular/platform-browser';
+import {MatIconRegistry} from '@angular/material/icon';
+
+const CSV_SOURCE = '<svg><image [attr.href]="assets/csv.png" height="40" width="40" fill="#a95963"/></svg>'
 
 @Component({
   selector: 'app-step-list',
@@ -13,10 +17,12 @@ export class StepListComponent implements OnInit {
   
   steps: Step[] = []
   selected: Step | undefined
-  constructor(private eventService: EventsService, private entityService: EntityService) {
+  constructor(private eventService: EventsService, private entityService: EntityService, 
+    iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     this.refresh()
     this.eventService.eventEvent$.subscribe(ev => {if (ev instanceof StepSelect) {this.selected = ev.step}})
     this.eventService.eventEvent$.subscribe(ev => {if (ev instanceof Refresh) this.refresh()})
+    iconRegistry.addSvgIconLiteral('csvSource', sanitizer.bypassSecurityTrustHtml(CSV_SOURCE));
   }
 
   refresh() {

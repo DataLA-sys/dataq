@@ -8,6 +8,7 @@
 </mat-toolbar>
 <mat-selection-list #listSteps [multiple]="false" (selectionChange)="onSelection($event, listSteps.selectedOptions)">
   <mat-list-option *ngFor="let step of steps" [selected]="step === selected" [value]="step">
+    <!--<mat-icon svgIcon="csvSource"></mat-icon>-->
     {{step.name}}
   </mat-list-option>
 </mat-selection-list>

@@ -24,32 +24,26 @@ export class GraphSize implements Event {
 }
 export class Refresh implements Event{}
 export class RefreshProjects implements Event{}
-export class File implements Event {
+export class StepFile implements Event {
     name: string;
-    constructor(name: string) {
+    step: string;
+    constructor(name: string, step: string) {
         this.name = name;
+        this.step = step;
     }
 }
 export class UpdateFileList implements Event{}
 export class CenterGraph implements Event{}
 export class FitGraph implements Event{}
-export class FileChanged implements Event{
-    name: string;
-    constructor(name: string) {
-        this.name = name;
-    }
-}
-export class FileSaved implements Event{
-    name: string;
-    constructor(name: string) {
-        this.name = name;
-    }
-}
+export class StepFileChanged extends StepFile implements Event {}
+export class StepFileSaved extends StepFile implements Event {}
 export class MainSave implements Event {}
 export class Run implements Event {
     sh: string;
-    constructor(sh: string) {
+    step: string;
+    constructor(sh: string, step: string) {
         this.sh = sh
+        this.step = step
     }
 }
 
