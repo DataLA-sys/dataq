@@ -46,6 +46,14 @@ export class Run implements Event {
         this.step = step
     }
 }
+export class Schema implements Event {
+    step: string
+    schema: any
+    constructor(step: string, schema: any) {
+        this.step = step
+        this.schema = schema
+    } 
+}
 
 @Injectable({ providedIn: 'root' })
 export class EventsService {

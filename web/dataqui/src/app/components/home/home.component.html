@@ -21,7 +21,7 @@
       </button>
       <input id="idname" [(ngModel)]="entity.name" readonly>
       <span>&nbsp;</span>
-      <span>Data Quarry</span>
+      <span>DataQuote</span>
       
       <span class="example-spacer"></span>
       <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
@@ -36,7 +36,7 @@
       <div fxFlex>
         <mat-tab-group (selectedIndexChange)="selectedIndexChange($event)" (selectedTabChange)="a($event)" [(selectedIndex)]="selectedTabIndex">
           <mat-tab label="Graph">
-              <div style="overflow: auto;height: 84vh;">  
+            <div style="overflow: auto;height: 84vh;">  
               <div fxLayout="column" style="width: 100%; height: 100%;" fxLayoutGap="5px">
                 <div fxFlex #graphContainer>
                   <app-graph></app-graph>

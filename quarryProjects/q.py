@@ -80,31 +80,74 @@ def arrangeSteps(data):
 
 def writeStep(stepTo):
     if printSchema == True:
-        spark.sql("select * from " + stepTo).printSchema()
+        print("schema start " + stepToOrig + " step")
+        print(spark.sql("select * from " + stepTo).schema.json()) #printSchema()
+        print("schema finish " + stepToOrig)
     else:    
         spark.sql("select * from " + stepTo).show(100)    
 
-#print(sys.argv)
+def interpolate(t):
+    data = json.loads(t)
+    for option in data["options"]:
+        s1 = ""
+        s2 = ""
+        for value in option["value"]:
+            if value["env"] == env:
+                s1 = option["name"]
+                s2 = value["value"]
+        if s1 == "":
+            for value in option["value"]:
+                if value["env"] == "":
+                    s1 = option["name"]
+                    s2 = value["value"]
+        if s1 != "":
+            t = t.replace("${" + s1 + "}", s2)
+            
+    return t
 
-sparkApp = "/mnt/c/projects/sbtprojects/dataq/quarryProjects/Example1/Example1.json"
+sparkApp = ""
+stepToOrig = ""
 stepTo = None
 printSchema = False
+env = ""
 
 for arg in sys.argv:
     if "sparkApp=" in arg:
         sparkApp = arg[9:]
     if "stepTo=" in arg:
         stepTo = arg[7:]
+        stepToOrig = stepTo
     if "printSchema=true" in arg: 
         printSchema = True
-
-spark = SparkSession.builder\
-        .master("local")\
-        .appName('PySpark_Tutorial')\
-        .getOrCreate()
+    if "env=" in arg:
+        env = arg[4:]
 
 f = open(sparkApp)
-data = json.load(f)
+t = f.read()
+f.close()
+
+data = json.loads(interpolate(t))
+
+for option in data["options"]:
+    s1 = ""
+    s2 = ""
+    for value in option["value"]:
+        if value["env"] == env:
+            s1 = option["name"]
+            s2 = value["value"]
+    if s1 == "":
+        for value in option["value"]:
+            if value["env"] == "":
+                s1 = option["name"]
+                s2 = value["value"]
+    if s1 != "":
+        t = t.replace("${" + s1 + "}", s2)
+
+data = json.loads(t)
+
+spark = SparkSession.builder\
+        .appName(data["name"])\
+        .getOrCreate()
 
 if stepTo != None:
     step = None
@@ -148,5 +191,3 @@ for target in targets:
 
 if stepTo != None:
     writeStep(stepTo)
-
-f.close()

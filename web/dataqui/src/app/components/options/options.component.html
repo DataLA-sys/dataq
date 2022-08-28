@@ -1,4 +1,5 @@
 <button (click)="add()">Add</button>
+
 <button (click)="apply()">Apply</button>
 <div *ngFor="let skill of optionsArray.controls; let index=index">
     <ng-container [formGroup]="skill">
@@ -10,9 +11,26 @@
         <span>&nbsp;</span>
         <label for="v-{{index}}">Value</label>
         <span>&nbsp;</span>
-        <input id="v-{{index}}" formControlName="value" />
-        <span>&nbsp;</span>
+        <button (click)="addVal(index)">Add item</button>
         <button (click)="del(index)">Del</button>
+        <ng-container *ngFor="let optvalue of skill.controls.value.controls; let j=index">
+          <ng-container [formGroup]="optvalue">
+            <br />
+            <label for="e-{{index}}-{{j}}">env</label>
+            <span>&nbsp;</span>
+            <input id="e-{{index}}-{{j}}" formControlName="env" />
+            <span>&nbsp;</span>
+            <label for="vv-{{index}}-{{j}}">value</label>
+            <span>&nbsp;</span>
+            <input id="vv-{{index}}-{{j}}" formControlName="value" />
+            <span>&nbsp;</span>
+            <button (click)="delVal(index, j)">Del item</button>
+          </ng-container>
+        </ng-container>
+        
+        <span>&nbsp;</span>
+        
+        <br/>
       </p>
     </ng-container>
   </div>

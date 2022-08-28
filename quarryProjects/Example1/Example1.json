@@ -54,6 +54,23 @@
             "value": null
           }
         ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "id",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "name",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
       }
     },
     {
@@ -82,6 +99,23 @@
             "value": null
           }
         ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "eid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "pay",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
       }
     },
     {
@@ -111,6 +145,23 @@
             "value": null
           }
         ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "pid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "amount",
+            "nullable": true,
+            "type": "double"
+          }
+        ],
+        "type": "struct"
       }
     },
     {
@@ -139,6 +190,29 @@
             "value": null
           }
         ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "eid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "pid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "pname",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
       }
     },
     {
@@ -149,7 +223,7 @@
         "opts": [
           {
             "option": "path",
-            "value": "C:/projects/temp/quarryExample/projects.csv"
+            "value": "${sourceFolder}/projects.csv"
           },
           {
             "option": "delimeter",
@@ -160,6 +234,23 @@
             "value": true
           }
         ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "id",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "name",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
       }
     },
     {
@@ -170,7 +261,7 @@
         "opts": [
           {
             "option": "path",
-            "value": "C:/projects/temp/quarryExample/employee.csv"
+            "value": "${sourceFolder}/employee.csv"
           },
           {
             "option": "delimeter",
@@ -181,6 +272,29 @@
             "value": true
           }
         ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "id",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "name",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "depid",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
       }
     },
     {
@@ -191,7 +305,7 @@
         "opts": [
           {
             "option": "path",
-            "value": "C:/projects/temp/quarryExample/dep.csv"
+            "value": "${sourceFolder}/dep.csv"
           },
           {
             "option": "delimeter",
@@ -202,6 +316,23 @@
             "value": true
           }
         ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "id",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "name",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
       }
     },
     {
@@ -214,7 +345,11 @@
         "opts": [
           {
             "option": "path",
-            "value": "C:/projects/temp/quarryExample/DataMart1.parquete"
+            "value": "${targetFolder}/DataMart1.parquete"
+          },
+          {
+            "option": "compression",
+            "value": null
           },
           {
             "option": "partitionBy",
@@ -229,6 +364,23 @@
             "value": 100
           }
         ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "pid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "amount",
+            "nullable": true,
+            "type": "double"
+          }
+        ],
+        "type": "struct"
       }
     },
     {
@@ -239,7 +391,7 @@
         "opts": [
           {
             "option": "path",
-            "value": "C:/projects/temp/quarryExample/pay.csv"
+            "value": "${sourceFolder}/pay.csv"
           },
           {
             "option": "delimeter",
@@ -250,6 +402,29 @@
             "value": true
           }
         ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "id",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "eid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "pay",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
       }
     },
     {
@@ -260,7 +435,7 @@
         "opts": [
           {
             "option": "path",
-            "value": "C:/projects/temp/quarryExample/spend.csv"
+            "value": "${sourceFolder}/spend.csv"
           },
           {
             "option": "delimeter",
@@ -281,7 +456,7 @@
         "opts": [
           {
             "option": "path",
-            "value": "C:/projects/temp/quarryExample/projectCrew.csv"
+            "value": "${sourceFolder}/projectCrew.csv"
           },
           {
             "option": "delimeter",
@@ -292,17 +467,67 @@
             "value": true
           }
         ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "id",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "eid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "pid",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
       }
     }
   ],
   "options": [
     {
-      "name": "f",
-      "value": ""
+      "name": "sourceFolder",
+      "value": [
+        {
+          "env": "dev",
+          "value": "C:/projects/temp/quarryExample/"
+        },
+        {
+          "env": "",
+          "value": "C:/projects/temp/quarryExample/"
+        }
+      ]
     },
     {
-      "name": "d1",
-      "value": ""
+      "name": "targetFolder",
+      "value": [
+        {
+          "env": "dev",
+          "value": "C:/projects/temp/quarryExample/"
+        },
+        {
+          "env": "",
+          "value": "C:/projects/temp/quarryExample/,"
+        }
+      ]
+    },
+    {
+      "name": "foler",
+      "value": [
+        {
+          "env": "",
+          "value": "cccc"
+        }
+      ]
     }
   ]
 }

@@ -33,12 +33,13 @@ export class EntityService {
           opt: {
             name: s.opt.name,
             opts: s.opt.opts?.map(o => {return {option: o.option, value: o.value}})
-          }
+          },
+          schema: s.schema
         }
       })
       tosave.options = this.entity.options
       let value = JSON.stringify(tosave,undefined,"  ")
-      console.log(value)
+
       return value
     }
 
@@ -53,7 +54,7 @@ export class EntityService {
     loadEntity(name: string) {
       this.http.get<string>("getEntity?project=" + name).subscribe(entity => {
         this.load(entity)
-        this.eventsService.emitEventEvent(new Refresh)
+        this.eventsService.emitEventEvent(new Refresh())
       }, error => {
         alert(error.error)
         console.log(error)
@@ -69,6 +70,9 @@ export class EntityService {
         step.opt.opts = s.opt.opts?.map((o: any) => {
           return {option: o.option, value: o.value}
         })
+        if(s.schema) {
+          step.schema = s.schema
+        }
         entity.steps.push(step)
       })
       value.steps?.forEach((s: any) => { 

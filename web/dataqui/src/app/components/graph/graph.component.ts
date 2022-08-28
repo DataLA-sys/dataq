@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { Node } from '@swimlane/ngx-graph';
 import { EntityService } from 'src/app/services/entity.service';
 import { Entity } from 'src/app/classes/entity';
-import { CenterGraph, EventsService, FitGraph, GraphSize, RedrawGraph, Refresh, StepSelect } from 'src/app/services/events.service';
+import { CenterGraph, EventsService, FitGraph, GraphSize, RedrawGraph, Refresh, Schema, StepSelect } from 'src/app/services/events.service';
 import { Step } from 'src/app/classes/step';
 
 @Component({
@@ -53,6 +53,12 @@ export class GraphComponent implements OnInit, OnChanges {
       if(ev instanceof CenterGraph) { this.center() }
       if(ev instanceof FitGraph) { this.fit() }
       if(ev instanceof Refresh) {this.fillGraphData()}
+      if(ev instanceof Schema) {
+        let found = this.entity?.steps.find(s=>s.name==ev.step)
+        if(found) {
+          found.schema = ev.schema
+        }
+      }
     })
   }
 

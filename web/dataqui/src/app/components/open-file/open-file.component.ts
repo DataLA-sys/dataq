@@ -6,6 +6,7 @@ import 'brace/theme/eclipse'
 import * as ace from "ace-builds";
 import { EventsService, StepFileChanged, StepFileSaved, MainSave } from 'src/app/services/events.service';
 import { Step } from 'src/app/classes/step';
+import { EntityService } from 'src/app/services/entity.service';
 
 @Component({
   selector: 'app-open-file',
@@ -20,11 +21,12 @@ export class OpenFileComponent implements OnInit {
   file!: string;
   @Input()
   step!: string;
+  schema: string =""
   
   events: string[] = []
   aceEditor!: ace.Ace.Editor;
 
-  constructor(private fileService: FilesService, private eventsService: EventsService) {
+  constructor(private fileService: FilesService, private eventsService: EventsService, private entityService: EntityService) {
     this.eventsService.eventEvent$.subscribe(ev => {
       if(ev instanceof MainSave) {
         this.save()
@@ -36,6 +38,14 @@ export class OpenFileComponent implements OnInit {
   savedContent: any = "";
   
   ngOnInit(): void {
+    let step = this.entityService.getEntity().steps.find(s=>s.name==this.step)
+    if(step){
+      let schema = ["{\"" + step.name + "\"" + ": " + JSON.stringify(step.schema, undefined, "    ") +"}"]
+      schema = schema.concat(step.in.map(i=>"{\"" + i.name + "\": " + JSON.stringify(i.schema, undefined, "    ") + "}"))
+      let s = "[" + schema.join(", \r") + "]" 
+      this.schema = JSON.stringify(JSON.parse(s.replace(": undefined", ": \"undefined\"")), undefined, "    ")
+    }
+
     this.fileService.getFile(this.file).subscribe(ev => {
       this.aceEditor = ace.edit(this.editor.nativeElement);
       this.content = ev

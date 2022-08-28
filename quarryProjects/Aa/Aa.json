@@ -39,5 +39,33 @@
         ]
       }
     }
+  ],
+  "options": [
+    {
+      "name": "v1",
+      "value": [
+        {
+          "env": "env1",
+          "value": "aa"
+        },
+        {
+          "env": "env2",
+          "value": "bb"
+        }
+      ]
+    },
+    {
+      "name": "v2",
+      "value": [
+        {
+          "env": "env1",
+          "value": "cc"
+        },
+        {
+          "env": "env2",
+          "value": "dd"
+        }
+      ]
+    }
   ]
 }

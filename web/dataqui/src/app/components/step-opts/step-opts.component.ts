@@ -3,7 +3,7 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { Step } from 'src/app/classes/step';
 import { EntityService } from 'src/app/services/entity.service';
-import { EventsService, StepFile, Refresh, Run, UpdateFileList, RedrawGraph } from 'src/app/services/events.service';
+import { EventsService, StepFile, Refresh, Run, UpdateFileList, RedrawGraph, Schema } from 'src/app/services/events.service';
 import { FilesService } from 'src/app/services/files.service';
 import { SettingService } from 'src/app/services/setting.service';
 
@@ -17,11 +17,13 @@ export class StepOptsComponent implements OnInit, OnChanges {
   private myType: any;
   optsTypes!: any;
   files: string[] = ["file.sql"]
+  prettySchema: any
 
   @Input()
   set step(step: Step | undefined) {
     this.step_ = step
     this.setOptsName()
+    this.prettySchema = this.getPrettySchema()
     this.eventsService.emitEventEvent(new UpdateFileList())
   }
 
@@ -106,6 +108,11 @@ export class StepOptsComponent implements OnInit, OnChanges {
             alert(error.error)
           }) 
         }
+        if(ev instanceof Schema){
+          if(ev.step == this.step_?.name){
+            this.prettySchema = this.getPrettySchema()
+          }
+        }
     })
   }
 
@@ -151,7 +158,7 @@ export class StepOptsComponent implements OnInit, OnChanges {
 
   run() {
     this.settingsService.getSettings().subscribe(st => {
-      let s = st.sparkSubmit + 
+      let s = st.sparkSubmit + " --master local" +
       " " + st.projects + "/q.py" +
       " sparkApp=" + st.projects + "/" + this.entityService.getEntity().name + "/" + this.entityService.getEntity().name + ".json" + 
       " stepTo=" + this.step_?.name
@@ -164,7 +171,7 @@ export class StepOptsComponent implements OnInit, OnChanges {
 
   printSchema() {
     this.settingsService.getSettings().subscribe(st => {
-      let s = st.sparkSubmit + 
+      let s = st.sparkSubmit +  " --master local" +
       " " + st.projects + "/q.py" +
       " sparkApp=" + st.projects + "/" + this.entityService.getEntity().name + "/" + this.entityService.getEntity().name + ".json" + 
       " stepTo=" + this.step_?.name + 
@@ -175,4 +182,33 @@ export class StepOptsComponent implements OnInit, OnChanges {
     })
   }
 
+  sourcesOpts() {
+    if(this.optsTypes) {
+      return this.optsTypes.filter((o: any)=>o.type==='source')
+    } else {
+      return []
+    }
+  }
+  stepsOpts() {
+    if(this.optsTypes) {
+      return this.optsTypes.filter((o: any)=>o.type===undefined)
+    } else {
+      return []
+    }
+  }
+  targetsOpts() {
+    if(this.optsTypes) {
+      return this.optsTypes.filter((o: any)=>o.type==='target')
+    } else {
+      return []
+    }
+  }
+  private getPrettySchema() {
+    let a = this.step_?.schema
+    if(a) {
+      return JSON.stringify(a, undefined, "   ")
+    } else {
+      return undefined
+    }
+  }
 }

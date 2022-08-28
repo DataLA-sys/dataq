@@ -806,7 +806,7 @@ HomeComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineComp
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](23, "\u00A0");
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](24, "span");
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](25, "Data Quarry");
+        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](25, "DataQuarter");
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](26, "span", 9);
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](27, "button", 10);

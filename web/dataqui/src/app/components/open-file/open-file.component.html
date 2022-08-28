@@ -3,15 +3,26 @@
       <mat-icon>save</mat-icon>
     </button>
 </mat-toolbar>
-<div style="overflow: auto;height: 50vh;">
+<div fxLayout="row">
+  <div fxFlex="70"  fxLayoutGap="5px" style="overflow: auto;height: 50vh;">
+      <div ace-editor 
+        #editor [(text)]="content" 
+        [mode]="'sql'" 
+        [theme]="'eclipse'" 
+        style="height:100%;" 
+        (textChanged)="onChange($event)"
+        [autoUpdateContent]="true"
+        [durationBeforeCallback]="300">
+      </div>
+  </div>
+  <div fxFlex="30"  fxLayoutGap="5px" style="overflow: auto;height: 50vh;">
     <div ace-editor 
-      #editor [(text)]="content" 
-      [mode]="'sql'" 
-      [theme]="'eclipse'" 
+      [text]="schema" 
+      [mode]="'json'" 
       style="height:100%;" 
-      (textChanged)="onChange($event)"
-      [autoUpdateContent]="true"
-      [durationBeforeCallback]="300"></div>
+      [autoUpdateContent]="true">
+    </div>
+  </div>
 </div>
 <div style="height: 25vh">
    <app-commands [step]="step"></app-commands>

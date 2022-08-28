@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { EventsService, Run } from 'src/app/services/events.service';
+import { EventsService, Run, Schema } from 'src/app/services/events.service';
 import { SysutilService, RunOperator } from 'src/app/services/sysutil.service';
 
 
@@ -22,6 +22,9 @@ export class CommandsComponent implements OnInit {
         if(ev.step == this.step) {
           this.runit = ev.sh
         }
+        if(this.step == undefined) {
+          this.runit = ev.sh
+        }
       }
     })
   }
@@ -31,6 +34,9 @@ export class CommandsComponent implements OnInit {
 
   filter(text: string, filter: boolean = true): string {
     if (!filter) {
+      return text
+    }
+    if(text == undefined) {
       return text
     }
     let textarray = text.split("\n")
@@ -46,9 +52,21 @@ export class CommandsComponent implements OnInit {
     })
   }
 
+  private findSchema(log: string) {
+    let start = log.indexOf("schema start")
+    if(start > -1) {
+      let finish = log.indexOf("schema finish")
+      let copy = log.slice(start, finish)
+      let step = copy.slice("schema start ".length, copy.indexOf(" step"))
+      copy = copy.slice(copy.indexOf("{"))
+      this.eventService.emitEventEvent(new Schema(step, JSON.parse(copy)))
+    }
+  }
+
   refreshlog(command: RunOperator) {
     this.sysutilService.refreshLog(command).subscribe(value => {
       command.log = value
+      this.findSchema(value)
     })
   }  
 
