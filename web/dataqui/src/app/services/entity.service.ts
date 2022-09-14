@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { Entity } from '../classes/entity';
 import { Step } from '../classes/step';
-import { EventsService, Refresh } from './events.service';
+import { Busy, EventsService, NotBusy, Refresh } from './events.service';
  
 @Injectable({ providedIn: 'root' })
 export class EntityService {
@@ -21,7 +21,7 @@ export class EntityService {
     }
 
     getEntity(): Entity {
-        return this.entity;
+      return this.entity;
     }
 
     getAsJson(): string {
@@ -52,10 +52,12 @@ export class EntityService {
     }
 
     loadEntity(name: string) {
+      this.eventsService.emitEventEvent(new Busy())
       this.http.get<string>("getEntity?project=" + name).subscribe(entity => {
         this.load(entity)
         this.eventsService.emitEventEvent(new Refresh())
       }, error => {
+        this.eventsService.emitEventEvent(new NotBusy())
         alert(error.error)
         console.log(error)
       })
@@ -96,7 +98,7 @@ export class EntityService {
 
     getStepImage(type: string): string {
       if(type === "CsvSource") {
-        return "assets/csv.png"
+        return "assets/csv.svg"
       }
       if(type === "ParquetTarget") {
         return "assets/icon--parquet.png"
@@ -105,18 +107,14 @@ export class EntityService {
         return "assets/icon--parquet.png"
       }
       if(type === "JDBCSource") {
-        return "assets/linkedTable.png"
+        return "assets/linkedTable.svg"
       }
       
       return "assets/sql.png"
     }
 
     getOptType() {
-      if(this.options !== undefined) {
-        return of(this.options)
-      } else {
-        return this.http.get<string>("/options")
-      }
+      return of(this.options)
     }
 
     createNew(name: string) {

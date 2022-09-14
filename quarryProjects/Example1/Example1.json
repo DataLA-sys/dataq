@@ -27,6 +27,35 @@
             "value": null
           }
         ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "id",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "name",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "depid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "deparment",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
       }
     },
     {

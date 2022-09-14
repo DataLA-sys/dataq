@@ -48,7 +48,7 @@ export class GraphComponent implements OnInit, OnChanges {
         setTimeout(() => {
           this.y = ev.h - 7;
           this.x = ev.w;
-        }, 100)
+        }, 10)
       }
       if(ev instanceof CenterGraph) { this.center() }
       if(ev instanceof FitGraph) { this.fit() }

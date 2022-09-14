@@ -60,7 +60,18 @@
     </mat-tab>
     <mat-tab label="Schema">
         <div style="overflow: auto;height: 32vh;">
-            <div ace-editor [text]="prettySchema" [mode]="'json'" [theme]="'eclipse'" [readOnly]="true" style="height:100%;"></div>
+            <ng-container *ngIf="step?.schema">
+                <table>
+                    <tr>
+                        <td colspan="2"><b>{{step.name}}</b></td>
+                    </tr>
+                    <tr *ngFor="let field of step.schema.fields">
+                        <td style="padding-left: 20px;">{{field.name}}</td>
+                        <td>{{field.type}}</td>
+                    </tr>
+                </table>
+            </ng-container>
+            <!--<div ace-editor [text]="prettySchema" [mode]="'json'" [theme]="'eclipse'" [readOnly]="true" style="height:100%;"></div>-->
         </div>
     </mat-tab>
 </mat-tab-group>

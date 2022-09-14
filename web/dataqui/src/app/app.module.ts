@@ -28,8 +28,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSidenavModule} from '@angular/material/sidenav';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { AceEditorModule } from 'ng2-ace-editor';
 import 'material-icons/iconfont/material-icons.css';
@@ -83,6 +84,7 @@ import { CommandsComponent } from './components/commands/commands.component';
     MatSidenavModule,
     MatTooltipModule,
     MatAutocompleteModule,
+    MatProgressSpinnerModule,
     FlexLayoutModule,
     FormsModule,
     NgxGraphModule,

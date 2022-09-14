@@ -54,6 +54,8 @@ export class Schema implements Event {
         this.schema = schema
     } 
 }
+export class Busy implements Event {}
+export class NotBusy implements Event {}
 
 @Injectable({ providedIn: 'root' })
 export class EventsService {

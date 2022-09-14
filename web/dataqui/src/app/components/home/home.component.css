@@ -12,3 +12,17 @@ mat-grid-tile {
   justify-content: space-between;
   flex-wrap: wrap;
 }
+
+.spinner-wrapper {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+}
+
+.overlay {
+  position: absolute;
+  z-index: 1002;
+  background-color: rgba(197, 197, 197, 0.5);
+  width: 100%;
+  height: 100%;
+}

@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { EntityService } from 'src/app/services/entity.service';
-import { CenterGraph, EventsService, StepFile, StepFileChanged, StepFileSaved, FitGraph, GraphSize, MainSave, Refresh, RefreshProjects } from 'src/app/services/events.service';
+import { CenterGraph, EventsService, StepFile, StepFileChanged, StepFileSaved, FitGraph, GraphSize, MainSave, Refresh, RefreshProjects, Busy, NotBusy, StepSelect } from 'src/app/services/events.service';
 import 'brace'
 import 'brace/mode/json'
 import 'brace/theme/eclipse'
 import * as ace from "ace-builds";
 import { Entity } from 'src/app/classes/entity';
-import { MatTabChangeEvent } from '@angular/material/tabs';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -19,16 +19,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
   openFiles: StepFile[] = []
   filesChanged: StepFileChanged[] = []
   selectedTabIndex = 0;
+  showSpinner: boolean = false;
+
+  private queryParam(param: string, value: string | number) {
+    let parameterObject: any = {}
+    parameterObject[param] = value
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: parameterObject,
+      queryParamsHandling: 'merge'
+    });
+  }
   
   selectedIndexChange(event: number) {
     if(event == 2) {
       this.filebody = this.entityService.getAsJson()
     }
-  }
-
-  a(event: MatTabChangeEvent) {
-    console.log("MatTabChangeEvent")
-    console.log(event)
+    this.queryParam('tab', event)    
   }
 
   @ViewChild("editor") private editor!: ElementRef<HTMLElement>;
@@ -39,12 +46,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   entity!: Entity
 
-  constructor(private http: HttpClient, private eventService: EventsService, public entityService: EntityService) { 
+  constructor(private http: HttpClient, private eventService: EventsService, 
+    private route: ActivatedRoute,  private router: Router, public entityService: EntityService) { 
     this.entity = this.entityService.getEntity()
     this.eventService.eventEvent$.subscribe(ev => {
       if(ev instanceof Refresh) {
         this.entity = entityService.getEntity()
         this.filebody = this.entityService.getAsJson()
+        this.queryParam('entity', this.entity.name)
+        this.eventService.emitEventEvent(new NotBusy())
       }
       if(ev instanceof StepFile) {
         let found = this.openFiles.find(f => f.name == ev.name && f.step == ev.step)
@@ -53,7 +63,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
           found = ev
         }
         setTimeout(() => this.selectedTabIndex = 4 + this.openFiles.indexOf(found || new StepFile("", "")), 100)
-        
       }
       if(ev instanceof StepFileChanged) {
         if(!this.filesChanged.find(f=>ev.name==f.name&&ev.step==f.step)) {
@@ -65,6 +74,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
         if(found) {
           this.filesChanged.splice(this.filesChanged.indexOf(found), 1)
         }
+      }
+      if(ev instanceof Busy) {
+        this.showSpinner = true
+      }
+      if(ev instanceof NotBusy) {
+        this.showSpinner = false
+      }
+      if(ev instanceof StepSelect) {
+        this.queryParam('step', ev.step.name)
       }
     })
   }
@@ -86,6 +104,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
     error => {
       console.log(error)
     })
+    if(this.entity.name == undefined){
+      let r = this.route.queryParams.subscribe(params =>{
+        if(params['entity']) {
+          this.entityService.loadEntity(params['entity'])
+          setTimeout(()=>{
+            let found = this.entity?.steps.find(s=>s.name === params['step'])
+            if(found) {
+              this.eventService.emitEventEvent(new StepSelect(found))
+            }
+          }, 100)
+        }
+      })
+      r.unsubscribe()
+    }
   }
 
   ngAfterViewInit() {
@@ -137,6 +169,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if(found) {
       this.filesChanged.splice(this.filesChanged.indexOf(found), 1)
     }
+    let s = JSON.stringify(this.openFiles)
+    this.queryParam('openFiles', s)
     this.selectedTabIndex = 0  
   }
 

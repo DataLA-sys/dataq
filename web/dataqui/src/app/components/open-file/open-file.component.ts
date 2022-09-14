@@ -21,7 +21,7 @@ export class OpenFileComponent implements OnInit {
   file!: string;
   @Input()
   step!: string;
-  schema: string =""
+  schema: any //string =""
   
   events: string[] = []
   aceEditor!: ace.Ace.Editor;
@@ -40,17 +40,23 @@ export class OpenFileComponent implements OnInit {
   ngOnInit(): void {
     let step = this.entityService.getEntity().steps.find(s=>s.name==this.step)
     if(step){
-      let schema = ["{\"" + step.name + "\"" + ": " + JSON.stringify(step.schema, undefined, "    ") +"}"]
-      schema = schema.concat(step.in.map(i=>"{\"" + i.name + "\": " + JSON.stringify(i.schema, undefined, "    ") + "}"))
+      let schema = ["{\"name\": \"" + step.name + "\", \"schema\":" + JSON.stringify(step.schema, undefined, "    ") +"}"]
+      schema = schema.concat(step.in.map(i=>"{\"name\":\"" + i.name + "\", \"schema\":" + JSON.stringify(i.schema, undefined, "    ") + "}"))
       let s = "[" + schema.join(", \r") + "]" 
-      this.schema = JSON.stringify(JSON.parse(s.replace(": undefined", ": \"undefined\"")), undefined, "    ")
+      s = s.replace("undefined", "{}")
+      this.schema = JSON.parse(s)
     }
 
     this.fileService.getFile(this.file).subscribe(ev => {
       this.aceEditor = ace.edit(this.editor.nativeElement);
       this.content = ev
       this.savedContent = ev
-      setTimeout(() => this.aceEditor.focus(), 100)
+      setTimeout(() => {
+        this.aceEditor.setValue(this.content)
+        this.aceEditor.session.setUndoManager(new ace.UndoManager())
+        this.aceEditor.getSession().selection.clearSelection();
+        this.aceEditor.focus()
+      }, 100)
     }, error => {
       console.error(error);
       alert(error.error)
@@ -82,6 +88,21 @@ export class OpenFileComponent implements OnInit {
       this.events.push("save")
       this.eventsService.emitEventEvent(new StepFileSaved(this.file, this.step))
     }
+  }
+
+  fildNameClick(name: string)  {
+    this.aceEditor.session.insert(this.aceEditor.getCursorPosition(), name)
+  }
+
+  undo() {
+    let u = this.aceEditor.session.getUndoManager()
+    this.aceEditor.session.getUndoManager().undo(this.aceEditor.session)
+    setTimeout(() => this.aceEditor.focus(), 100)
+  }
+
+  redo() {
+    this.aceEditor.session.getUndoManager().redo(this.aceEditor.session)
+    setTimeout(() => this.aceEditor.focus(), 100)
   }
 
 }

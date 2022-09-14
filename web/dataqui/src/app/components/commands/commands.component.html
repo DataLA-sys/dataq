@@ -1,33 +1,11 @@
-
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-          Sh command to run
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <p matLine>
-      <input type="text" size="120" [(ngModel)]="runit" autocomplete="on">
-      <button mat-button color="basic" matTooltip="Run this command" (click)="runIt(runit)">
-        <mat-icon>play_arrow</mat-icon>
-      </button>      
-    </p>
-  </mat-expansion-panel>  
-  <mat-expansion-panel *ngIf="run" expanded="true">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-          {{run.shCommand}}
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <p matLine>
-      {{run.runid}}
-    </p>
-    <p matLine>
-      <textarea cols="160" rows="20" disabled>{{filter(run.log)}}</textarea>        
-    </p>
-    <mat-action-row>
-      <button mat-button color="basic" (click)="refreshlog(run)">
-          Refresh
-          <mat-icon>autorenew</mat-icon>
-      </button>
-    </mat-action-row>
-  </mat-expansion-panel>
+<p matLine>
+  <input type="text" size="120" [(ngModel)]="runit" autocomplete="on">      
+  <button mat-button color="basic" matTooltip="Run this command" (click)="runIt(runit)">
+    <mat-icon>play_arrow</mat-icon>
+  </button>      
+</p>
+<textarea cols="160" rows="20" disabled>{{filter(run?.log)}}</textarea>        
+<button mat-button color="basic" (click)="refreshlog(run)">
+    Refresh
+    <mat-icon>autorenew</mat-icon>
+</button>

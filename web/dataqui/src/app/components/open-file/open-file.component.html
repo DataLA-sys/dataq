@@ -1,7 +1,14 @@
 <mat-toolbar>
-    <button mat-icon-button class="example-icon" (click)="save()" matTooltip="Save">
+    <button mat-icon-button (click)="undo()" matTooltip="Undo">
+      <mat-icon>undo</mat-icon>
+    </button>
+    <button mat-icon-button (click)="redo()" matTooltip="Redo">
+      <mat-icon>redo</mat-icon>
+    </button>
+    <button mat-icon-button (click)="save()" matTooltip="Save">
       <mat-icon>save</mat-icon>
     </button>
+    {{step}}&nbsp;({{file}})
 </mat-toolbar>
 <div fxLayout="row">
   <div fxFlex="70"  fxLayoutGap="5px" style="overflow: auto;height: 50vh;">
@@ -16,12 +23,19 @@
       </div>
   </div>
   <div fxFlex="30"  fxLayoutGap="5px" style="overflow: auto;height: 50vh;">
-    <div ace-editor 
-      [text]="schema" 
-      [mode]="'json'" 
-      style="height:100%;" 
-      [autoUpdateContent]="true">
-    </div>
+    <ng-container *ngIf="schema">
+      <table style="padding-left: 20px;">
+        <ng-container *ngFor="let sc of schema">
+          <tr>
+            <td colspan="2"><b>{{sc.name}}</b></td>
+          </tr>
+          <tr *ngFor="let field of sc.schema.fields">
+            <td style="padding-left: 20px;"><a [routerLink]="" (click)="fildNameClick(field.name)">{{field.name}}</a></td>
+            <td>{{field.type}}</td>
+          </tr>
+        </ng-container>      
+      </table>
+    </ng-container>
   </div>
 </div>
 <div style="height: 25vh">

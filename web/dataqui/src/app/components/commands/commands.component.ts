@@ -63,11 +63,13 @@ export class CommandsComponent implements OnInit {
     }
   }
 
-  refreshlog(command: RunOperator) {
-    this.sysutilService.refreshLog(command).subscribe(value => {
-      command.log = value
-      this.findSchema(value)
-    })
+  refreshlog(command: RunOperator | undefined) {
+    if(command) {
+      this.sysutilService.refreshLog(command).subscribe(value => {
+        command.log = value
+        this.findSchema(value)
+      })
+    }
   }  
 
 }

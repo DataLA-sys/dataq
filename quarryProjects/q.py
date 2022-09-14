@@ -80,8 +80,9 @@ def arrangeSteps(data):
 
 def writeStep(stepTo):
     if printSchema == True:
+        print(spark.sql("select * from " + stepTo).printSchema())
         print("schema start " + stepToOrig + " step")
-        print(spark.sql("select * from " + stepTo).schema.json()) #printSchema()
+        print(spark.sql("select * from " + stepTo).schema.json())
         print("schema finish " + stepToOrig)
     else:    
         spark.sql("select * from " + stepTo).show(100)    

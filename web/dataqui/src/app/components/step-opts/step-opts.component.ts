@@ -203,6 +203,7 @@ export class StepOptsComponent implements OnInit, OnChanges {
       return []
     }
   }
+  
   private getPrettySchema() {
     let a = this.step_?.schema
     if(a) {
