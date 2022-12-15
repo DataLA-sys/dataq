@@ -56,13 +56,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.queryParam('entity', this.entity.name)
         this.eventService.emitEventEvent(new NotBusy())
       }
-      if(ev instanceof StepFile) {
+      if((ev instanceof StepFile) && !(ev instanceof StepFileSaved)) {
         let found = this.openFiles.find(f => f.name == ev.name && f.step == ev.step)
         if(!found) {
           this.openFiles.push(ev)
           found = ev
         }
-        setTimeout(() => this.selectedTabIndex = 4 + this.openFiles.indexOf(found || new StepFile("", "")), 100)
+        setTimeout(() => { 
+          this.selectedTabIndex = 4 + this.openFiles.indexOf(found || new StepFile("", ""))
+          let s = JSON.stringify(this.openFiles)
+          this.queryParam('openFiles', s)
+        }, 100)
       }
       if(ev instanceof StepFileChanged) {
         if(!this.filesChanged.find(f=>ev.name==f.name&&ev.step==f.step)) {
@@ -107,13 +111,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if(this.entity.name == undefined){
       let r = this.route.queryParams.subscribe(params =>{
         if(params['entity']) {
-          this.entityService.loadEntity(params['entity'])
-          setTimeout(()=>{
+          this.entityService.loadEntity(params['entity']).add((t: any)=>{
             let found = this.entity?.steps.find(s=>s.name === params['step'])
             if(found) {
               this.eventService.emitEventEvent(new StepSelect(found))
             }
-          }, 100)
+            let openFiles = params['openFiles']
+            if(openFiles){
+              let openFilesParsed: StepFile[] = JSON.parse(openFiles)
+              this.openFiles = openFilesParsed
+            }
+          })
         }
       })
       r.unsubscribe()

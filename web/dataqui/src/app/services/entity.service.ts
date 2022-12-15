@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { Entity } from '../classes/entity';
 import { Step } from '../classes/step';
 import { Busy, EventsService, NotBusy, Refresh } from './events.service';
@@ -51,9 +51,10 @@ export class EntityService {
       return this.http.post<string>("/save", value, opt)
     }
 
-    loadEntity(name: string) {
+    loadEntity(name: string): Subscription {
       this.eventsService.emitEventEvent(new Busy())
-      this.http.get<string>("getEntity?project=" + name).subscribe(entity => {
+
+      return this.http.get<string>("getEntity?project=" + name).subscribe(entity => {
         this.load(entity)
         this.eventsService.emitEventEvent(new Refresh())
       }, error => {
