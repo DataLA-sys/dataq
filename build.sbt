@@ -13,7 +13,12 @@ assemblyMergeStrategy in assembly := {
 lazy val execNpmBuildScript = taskKey[Unit]("Build UI project")
 
 execNpmBuildScript := {
-  "buildui.bat" !
+  System.getProperty("os.name").toLowerCase match {
+    case win if win.contains("win") => "buildui.bat" !
+    case linux if linux.contains("linux") => "./buildui.sh" !
+    case osName => throw new RuntimeException(s"Unknown operating system $osName")
+  }
+//"buildui.bat" !
 }
 
 lazy val root = (project in file(".")).
