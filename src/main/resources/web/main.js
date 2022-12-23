@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\projects\sbtprojects\dataq\web\dataqui\src\main.ts */"zUnb");
+module.exports = __webpack_require__(/*! /home/Paav/projects/dataq/web/dataqui/src/main.ts */"zUnb");
 
 
 /***/ }),
@@ -1520,6 +1520,7 @@ class AuthGuard {
             // logged in so return true
             return true;
         }
+        return true;
         // not logged in so redirect to login page with the return url
         this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
         return false;

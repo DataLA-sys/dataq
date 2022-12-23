@@ -1,0 +1,562 @@
+{
+  "name": "Example1",
+  "steps": [
+    {
+      "name": "EmpAndDeps",
+      "in": [
+        "dep",
+        "employee"
+      ],
+      "opt": {
+        "name": "SparkSQL",
+        "opts": [
+          {
+            "option": "sqlfile",
+            "value": "EmployeesAndDepartmens.sql"
+          },
+          {
+            "option": "save",
+            "value": null
+          },
+          {
+            "option": "window",
+            "value": null
+          },
+          {
+            "option": "window2",
+            "value": null
+          }
+        ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "id",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "name",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "depid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "deparment",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
+      }
+    },
+    {
+      "name": "Projects",
+      "in": [
+        "ProjectSource"
+      ],
+      "opt": {
+        "name": "SparkSQL",
+        "opts": [
+          {
+            "option": "sqlfile",
+            "value": "Projects.sql"
+          },
+          {
+            "option": "save",
+            "value": null
+          },
+          {
+            "option": "window",
+            "value": null
+          },
+          {
+            "option": "window2",
+            "value": null
+          }
+        ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "id",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "name",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
+      }
+    },
+    {
+      "name": "Pay",
+      "in": [
+        "EmpAndDeps",
+        "PaySource"
+      ],
+      "opt": {
+        "name": "SparkSQL",
+        "opts": [
+          {
+            "option": "sqlfile",
+            "value": "Pay.sql"
+          },
+          {
+            "option": "save",
+            "value": null
+          },
+          {
+            "option": "window",
+            "value": null
+          },
+          {
+            "option": "window2",
+            "value": null
+          }
+        ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "eid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "pay",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
+      }
+    },
+    {
+      "name": "SpendOnProject",
+      "in": [
+        "Pay",
+        "AllProjEmpl",
+        "spend"
+      ],
+      "opt": {
+        "name": "SparkSQL",
+        "opts": [
+          {
+            "option": "sqlfile",
+            "value": "SpendOnProject.sql"
+          },
+          {
+            "option": "save",
+            "value": null
+          },
+          {
+            "option": "window",
+            "value": null
+          },
+          {
+            "option": "window2",
+            "value": null
+          }
+        ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "pid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "amount",
+            "nullable": true,
+            "type": "double"
+          }
+        ],
+        "type": "struct"
+      }
+    },
+    {
+      "name": "AllProjEmpl",
+      "in": [
+        "Projects",
+        "projectCrew"
+      ],
+      "opt": {
+        "name": "SparkSQL",
+        "opts": [
+          {
+            "option": "sqlfile",
+            "value": "AllProjectEmploeys.sql"
+          },
+          {
+            "option": "save",
+            "value": null
+          },
+          {
+            "option": "window",
+            "value": null
+          },
+          {
+            "option": "window2",
+            "value": null
+          }
+        ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "eid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "pid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "pname",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
+      }
+    },
+    {
+      "name": "ProjectSource",
+      "in": [],
+      "opt": {
+        "name": "CsvSource",
+        "opts": [
+          {
+            "option": "path",
+            "value": "${sourceFolder}/projects.csv"
+          },
+          {
+            "option": "delimeter",
+            "value": ";"
+          },
+          {
+            "option": "fistRowAsColumnNames",
+            "value": true
+          }
+        ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "id",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "name",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
+      }
+    },
+    {
+      "name": "employee",
+      "in": [],
+      "opt": {
+        "name": "CsvSource",
+        "opts": [
+          {
+            "option": "path",
+            "value": "${sourceFolder}/employee.csv"
+          },
+          {
+            "option": "delimeter",
+            "value": ";"
+          },
+          {
+            "option": "fistRowAsColumnNames",
+            "value": true
+          }
+        ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "id",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "name",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "depid",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
+      }
+    },
+    {
+      "name": "dep",
+      "in": [],
+      "opt": {
+        "name": "CsvSource",
+        "opts": [
+          {
+            "option": "path",
+            "value": "${sourceFolder}/dep.csv"
+          },
+          {
+            "option": "delimeter",
+            "value": ";"
+          },
+          {
+            "option": "fistRowAsColumnNames",
+            "value": true
+          }
+        ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "id",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "name",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
+      }
+    },
+    {
+      "name": "DataMart1",
+      "in": [
+        "SpendOnProject"
+      ],
+      "opt": {
+        "name": "ParquetTarget",
+        "opts": [
+          {
+            "option": "path",
+            "value": "${targetFolder}/DataMart1.parquete"
+          },
+          {
+            "option": "compression",
+            "value": null
+          },
+          {
+            "option": "partitionBy",
+            "value": "pid"
+          },
+          {
+            "option": "repartition",
+            "value": null
+          },
+          {
+            "option": "coalesce",
+            "value": 100
+          }
+        ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "pid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "amount",
+            "nullable": true,
+            "type": "double"
+          }
+        ],
+        "type": "struct"
+      }
+    },
+    {
+      "name": "PaySource",
+      "in": [],
+      "opt": {
+        "name": "CsvSource",
+        "opts": [
+          {
+            "option": "path",
+            "value": "${sourceFolder}/pay.csv"
+          },
+          {
+            "option": "delimeter",
+            "value": ";"
+          },
+          {
+            "option": "fistRowAsColumnNames",
+            "value": true
+          }
+        ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "id",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "eid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "pay",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
+      }
+    },
+    {
+      "name": "spend",
+      "in": [],
+      "opt": {
+        "name": "CsvSource",
+        "opts": [
+          {
+            "option": "path",
+            "value": "${sourceFolder}/spend.csv"
+          },
+          {
+            "option": "delimeter",
+            "value": ";"
+          },
+          {
+            "option": "fistRowAsColumnNames",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "projectCrew",
+      "in": [],
+      "opt": {
+        "name": "CsvSource",
+        "opts": [
+          {
+            "option": "path",
+            "value": "${sourceFolder}/projectCrew.csv"
+          },
+          {
+            "option": "delimeter",
+            "value": ";"
+          },
+          {
+            "option": "fistRowAsColumnNames",
+            "value": true
+          }
+        ]
+      },
+      "schema": {
+        "fields": [
+          {
+            "metadata": {},
+            "name": "id",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "eid",
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "metadata": {},
+            "name": "pid",
+            "nullable": true,
+            "type": "string"
+          }
+        ],
+        "type": "struct"
+      }
+    }
+  ],
+  "options": [
+    {
+      "name": "sourceFolder",
+      "value": [
+        {
+          "env": "dev",
+          "value": "C:/projects/temp/quarryExample/"
+        },
+        {
+          "env": "",
+          "value": "C:/projects/temp/quarryExample/"
+        }
+      ]
+    },
+    {
+      "name": "targetFolder",
+      "value": [
+        {
+          "env": "dev",
+          "value": "C:/projects/temp/quarryExample/"
+        },
+        {
+          "env": "",
+          "value": "C:/projects/temp/quarryExample/,"
+        }
+      ]
+    },
+    {
+      "name": "foler",
+      "value": [
+        {
+          "env": "",
+          "value": "cccc"
+        }
+      ]
+    }
+  ]
+}
