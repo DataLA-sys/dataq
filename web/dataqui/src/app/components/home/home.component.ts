@@ -30,24 +30,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
       queryParamsHandling: 'merge'
     });
   }
-  
+
   selectedIndexChange(event: number) {
     if(event == 2) {
       this.filebody = this.entityService.getAsJson()
     }
-    this.queryParam('tab', event)    
+    this.queryParam('tab', event)
   }
 
   @ViewChild("editor") private editor!: ElementRef<HTMLElement>;
-   
+
   openDrawer() {
     this.eventService.emitEventEvent(new RefreshProjects())
   }
 
   entity!: Entity
 
-  constructor(private http: HttpClient, private eventService: EventsService, 
-    private route: ActivatedRoute,  private router: Router, public entityService: EntityService) { 
+  constructor(private http: HttpClient, private eventService: EventsService,
+    private route: ActivatedRoute,  private router: Router, public entityService: EntityService) {
     this.entity = this.entityService.getEntity()
     this.eventService.eventEvent$.subscribe(ev => {
       if(ev instanceof Refresh) {
@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.openFiles.push(ev)
           found = ev
         }
-        setTimeout(() => { 
+        setTimeout(() => {
           this.selectedTabIndex = 4 + this.openFiles.indexOf(found || new StepFile("", ""))
           let s = JSON.stringify(this.openFiles)
           this.queryParam('openFiles', s)
@@ -179,7 +179,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
     let s = JSON.stringify(this.openFiles)
     this.queryParam('openFiles', s)
-    this.selectedTabIndex = 0  
+    this.selectedTabIndex = 0
   }
 
   stepFileIsChanged(file: StepFile): boolean {

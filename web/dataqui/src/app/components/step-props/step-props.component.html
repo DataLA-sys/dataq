@@ -18,7 +18,7 @@
       <button mat-icon-button [disabled]="selectedStep == undefined" (click)="rmIn(selectedStep)">
         <mat-icon>remove</mat-icon>
       </button>
-      <select size="10" style="width: 100%;" [(ngModel)]="selectedStep">
+      <select size="8" style="width: 100%;" [(ngModel)]="selectedStep">
         <option *ngFor="let i of step.in" [ngValue]="i">{{i.name}}</option>
       </select>
     </div>
