@@ -1,37 +1,29 @@
-<button (click)="add()">Add</button>
-
-<button (click)="apply()">Apply</button>
+<button (click)="add()" class="ml">Add</button>
+<button (click)="apply()" class="ml">Apply</button>
+<hr class="solid">
 <div *ngFor="let skill of optionsArray.controls; let index=index">
     <ng-container [formGroup]="skill">
-      <p>
-        <span>&nbsp;</span>
-        <label for="n-{{index}}">Name</label>
-        <span>&nbsp;</span>
-        <input id="n-{{index}}" formControlName="name" />
-        <span>&nbsp;</span>
-        <label for="v-{{index}}">Value</label>
-        <span>&nbsp;</span>
-        <button (click)="addVal(index)">Add item</button>
-        <button (click)="del(index)">Del</button>
+      <div>
+        <div>
+          <label for="n-{{index}}">Name</label>
+          <input id="n-{{index}}" formControlName="name" class="ml"/>
+          <label for="v-{{index}}">Value</label>
+          <button (click)="addVal(index)" class="ml">Add item</button>
+          <button (click)="del(index)" class="ml">Del</button>
+        </div>
         <ng-container *ngFor="let optvalue of skill.controls.value.controls; let j=index">
           <ng-container [formGroup]="optvalue">
-            <br />
-            <label for="e-{{index}}-{{j}}">env</label>
-            <span>&nbsp;</span>
-            <input id="e-{{index}}-{{j}}" formControlName="env" />
-            <span>&nbsp;</span>
-            <label for="vv-{{index}}-{{j}}">value</label>
-            <span>&nbsp;</span>
-            <input id="vv-{{index}}-{{j}}" formControlName="value" />
-            <span>&nbsp;</span>
-            <button (click)="delVal(index, j)">Del item</button>
+            <div>
+              <label for="e-{{index}}-{{j}}">env&nbsp;&nbsp;</label>
+              <input id="e-{{index}}-{{j}}" formControlName="env" class="ml"/>
+              <label for="vv-{{index}}-{{j}}">value</label>
+              <input id="vv-{{index}}-{{j}}" formControlName="value" class="ml"/>
+              <button (click)="delVal(index, j)">Del item</button>
+            </div>
           </ng-container>
         </ng-container>
-        
-        <span>&nbsp;</span>
-        
-        <br/>
-      </p>
+        <hr class="solid">
+      </div>
     </ng-container>
   </div>
 

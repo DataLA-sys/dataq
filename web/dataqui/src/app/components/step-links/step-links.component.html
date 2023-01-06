@@ -1,0 +1,28 @@
+<div fxLayout="row" style="height: 100%;overflow-y: auto;margin-left: 5px;" fxLayoutGap="5px">
+  <div fxFlex="30" fxLayoutGap="5px">
+    <br>
+    in
+    <button mat-icon-button [matMenuTriggerFor]="menu" [disabled]="forAdd.length === 0">
+      <mat-icon>add</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item *ngFor="let s of forAdd" (click)="addIn(s)">
+        <mat-icon [svgIcon]="s.opt.name"></mat-icon>
+        <span>{{s.name}}</span>
+      </button>
+    </mat-menu>
+
+    <button mat-icon-button [disabled]="selectedStep == undefined" (click)="rmIn(selectedStep)">
+      <mat-icon>remove</mat-icon>
+    </button>
+    <mat-selection-list #listSteps [multiple]="false" (selectionChange)="onSelection($event, listSteps.selectedOptions)">
+      <mat-list-option *ngFor="let s of step?.in" [selected]="s === selectedStep" [value]="s">
+        <div class="center-vertically">
+          <mat-icon [svgIcon]="s.opt.name"></mat-icon>
+          {{s.name}}
+        </div>
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+</div>
+

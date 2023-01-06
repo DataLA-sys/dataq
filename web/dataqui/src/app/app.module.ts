@@ -20,6 +20,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
 import {MatButtonModule} from '@angular/material/button';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatCardModule} from '@angular/material/card';
 import {MatExpansionModule} from '@angular/material/expansion';
@@ -34,9 +35,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { AceEditorModule } from 'ng2-ace-editor';
 import 'material-icons/iconfont/material-icons.css';
+import { AngularSplitModule } from 'angular-split';
 
 import { StepListComponent } from './components/step-list/step-list.component';
-import { StepPropsComponent } from './components/step-props/step-props.component';
+import { StepLinksComponent } from './components/step-links/step-links.component';
+import { StepPropsGroupComponent } from './components/step-props-group/step-props-group.component';
 import { GraphComponent } from './components/graph/graph.component';
 import { StepOptsComponent } from './components/step-opts/step-opts.component';
 import { ProjectsComponent } from './components/projects/projects.component';
@@ -50,7 +53,8 @@ import { CommandsComponent } from './components/commands/commands.component';
     LoginComponent,
     HomeComponent,
     StepListComponent,
-    StepPropsComponent,
+    StepLinksComponent,
+    StepPropsGroupComponent,
     GraphComponent,
     StepOptsComponent,
     ProjectsComponent,
@@ -74,6 +78,7 @@ import { CommandsComponent } from './components/commands/commands.component';
     MatIconModule,
     MatListModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatTabsModule,
     MatCardModule,
     MatExpansionModule,
@@ -88,7 +93,8 @@ import { CommandsComponent } from './components/commands/commands.component';
     FlexLayoutModule,
     FormsModule,
     NgxGraphModule,
-    AceEditorModule
+    AceEditorModule,
+    AngularSplitModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },

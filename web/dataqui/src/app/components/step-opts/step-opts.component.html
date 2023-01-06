@@ -1,77 +1,59 @@
-<mat-tab-group>
-    <mat-tab label="Options">
-        <form>
-            <datalist id="datalist">
-                <option *ngFor="let file of files" value="{{file}}">
-            </datalist>
-            <h2>Options</h2>
-            <ng-container *ngIf="step">
-                <div fxLayot="row" fxLayoutGap="5px" style="margin-bottom: 5px;">
-                    <div fxFlex="20">
-                        <label for="selectType">Type</label>
-                    </div>
-                    <div fxFlex>
-                        <select name="selectType" [(ngModel)]="step.opt.name" (ngModelChange)="modelChangeFn($event)">
-                            <option disabled>--source</option>
-                            <option *ngFor="let o of sourcesOpts()" [ngValue]="o.name">{{o.name}}</option>
-                            <option disabled>--step</option>
-                            <option *ngFor="let o of stepsOpts()" [ngValue]="o.name">{{o.name}}</option>
-                            <option disabled>--target</option>
-                            <option *ngFor="let o of targetsOpts()" [ngValue]="o.name">{{o.name}}</option>
-                        </select>
-                        <button mat-icon-button class="example-icon" matTooltip="Run step" (click)="run()">
-                            <mat-icon>play_arrow</mat-icon>
-                        </button>
-                        <button mat-icon-button class="example-icon" matTooltip="Read schema" (click)="printSchema()">
-                            <mat-icon>segment</mat-icon>
-                        </button>
-                    </div>
+<form>
+    <datalist id="datalist">
+        <option *ngFor="let file of files" value="{{file}}">
+    </datalist>
+    <ng-container *ngIf="step">
+        <div fxLayot="row" fxLayoutGap="5px" style="margin-bottom: 5px;" class="center-vertically">
+            <div fxFlex="20"><br>
+                <label for="Name">Name</label>
+            </div>
+            <div fxFlex><br>
+                <input *ngIf="step" name="stepName" [(ngModel)]="step.name">
+            </div>
+        </div>
+        <div fxLayot="row" fxLayoutGap="5px" style="margin-bottom: 5px;" class="center-vertically">
+            <div fxFlex="20">
+                <label for="selectType">Type</label>
+            </div>
+            <div fxFlex>
+                <select name="selectType" [(ngModel)]="step.opt.name" (ngModelChange)="modelChangeFn($event)">
+                    <option disabled>--source</option>
+                    <option *ngFor="let o of sourcesOpts()" [ngValue]="o.name">{{o.name}}</option>
+                    <option disabled>--step</option>
+                    <option *ngFor="let o of stepsOpts()" [ngValue]="o.name">{{o.name}}</option>
+                    <option disabled>--target</option>
+                    <option *ngFor="let o of targetsOpts()" [ngValue]="o.name">{{o.name}}</option>
+                </select>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="optsControl">
+    <div [formGroup]="optsControl">
+        <div formArrayName="opt">
+            <div *ngFor="let o of opt.controls; let i=index" class="center-vertically" fxLayot="row" fxLayoutGap="5px" style="margin-bottom: 5px;">
+                <div fxFlex="20">
+                    <label for="o-{{i}}">{{labels[i]}}</label>
                 </div>
-            </ng-container>
-            <ng-container *ngIf="optsControl">
-            <div [formGroup]="optsControl">
-                <div formArrayName="opt">  
-                    <div *ngFor="let o of opt.controls; let i=index" fxLayot="row" fxLayoutGap="5px" style="margin-bottom: 5px;">
-                        <div fxFlex="20">
-                            <label for="o-{{i}}">{{labels[i]}}</label>
-                        </div>
-                        <div fxFlex>
-                            <ng-container [ngSwitch]="types[i]">
-                                <ng-container *ngSwitchCase="'string'">
-                                    <input list="datalist" type="text" id="o-{{i}}" [formControlName]="i" style="width: 80%;">
-                                    <ng-container *ngIf="labels[i].includes('file')">
-                                        <button mat-icon-button class="example-icon" (click)="openFile(o.value)">
-                                            <mat-icon>file_open</mat-icon>
-                                        </button>
-                                        <button mat-icon-button class="example-icon" (click)="deleteFile(o.value)">
-                                            <mat-icon>delete</mat-icon>
-                                        </button>
-                                    </ng-container>
-                                </ng-container>
-                                <input *ngSwitchCase="'boolean'" type="checkbox" id="o-{{i}}" [formControlName]="i">
-                                <input *ngSwitchCase="'number'"  type="number" id="o-{{i}}" [formControlName]="i">
+                <div fxFlex>
+                    <ng-container [ngSwitch]="types[i]">
+                        <ng-container *ngSwitchCase="'string'">
+                            <input list="datalist" type="text" id="o-{{i}}" [formControlName]="i" style="width: 80%;">
+                            <ng-container *ngIf="labels[i].includes('file')">
+                                <button mat-icon-button class="example-icon" (click)="openFile(o.value)">
+                                    <mat-icon>file_open</mat-icon>
+                                </button>
+                                <button mat-icon-button class="example-icon" (click)="deleteFile(o.value)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
                             </ng-container>
-                        </div>
-                    </div>
+                        </ng-container>
+                        <input *ngSwitchCase="'boolean'" type="checkbox" id="o-{{i}}" [formControlName]="i">
+                        <input *ngSwitchCase="'number'"  type="number" id="o-{{i}}" [formControlName]="i">
+                    </ng-container>
                 </div>
             </div>
-            </ng-container>
-        </form>
-    </mat-tab>
-    <mat-tab label="Schema">
-        <div style="overflow: auto;height: 32vh;">
-            <ng-container *ngIf="step?.schema">
-                <table>
-                    <tr>
-                        <td colspan="2"><b>{{step.name}}</b></td>
-                    </tr>
-                    <tr *ngFor="let field of step.schema.fields">
-                        <td style="padding-left: 20px;">{{field.name}}</td>
-                        <td>{{field.type}}</td>
-                    </tr>
-                </table>
-            </ng-container>
-            <!--<div ace-editor [text]="prettySchema" [mode]="'json'" [theme]="'eclipse'" [readOnly]="true" style="height:100%;"></div>-->
         </div>
-    </mat-tab>
-</mat-tab-group>
+    </div>
+    </ng-container>
+</form>
+    

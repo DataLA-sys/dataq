@@ -528,7 +528,7 @@
       "value": [
         {
           "env": "dev",
-          "value": "C:/projects/temp/quarryExample/"
+          "value": "/home/Paav/projects/dataq/dist/exampleData/"
         },
         {
           "env": "",
@@ -541,20 +541,11 @@
       "value": [
         {
           "env": "dev",
-          "value": "C:/projects/temp/quarryExample/"
+          "value": "/home/Paav/projects/dataq/dist/exampleData/result/"
         },
         {
           "env": "",
-          "value": "C:/projects/temp/quarryExample/,"
-        }
-      ]
-    },
-    {
-      "name": "foler",
-      "value": [
-        {
-          "env": "",
-          "value": "cccc"
+          "value": "C:/projects/temp/quarryExample/"
         }
       ]
     }

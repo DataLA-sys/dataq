@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { EventsService, Run, Schema } from 'src/app/services/events.service';
+import { SettingService } from 'src/app/services/setting.service';
 import { SysutilService, RunOperator } from 'src/app/services/sysutil.service';
 
 
@@ -10,13 +11,26 @@ import { SysutilService, RunOperator } from 'src/app/services/sysutil.service';
 })
 export class CommandsComponent implements OnInit {
 
+  private step_: string | undefined;
   @Input()
-  step: string | undefined;
+  get step(): string | undefined { 
+    return this.step_ 
+  }
+  set step(value: string | undefined) {
+    this.step_ = value
+    this.runit = ""
+  };
 
   run?: RunOperator = undefined
   runit: string = ""
+
+  @Input()
+  rows: number = 20
+  @Input()
+  cols: number = 100
   
-  constructor(private sysutilService: SysutilService, private eventService: EventsService) { 
+  constructor(private sysutilService: SysutilService, private eventService: EventsService, 
+    private settingsService: SettingService) { 
     this.eventService.eventEvent$.subscribe(ev => {
       if(ev instanceof Run) {
         if(ev.step == this.step) {
@@ -70,6 +84,16 @@ export class CommandsComponent implements OnInit {
         this.findSchema(value)
       })
     }
-  }  
+  }
+  
+  getRunCommand() {
+    if(this.step)
+    this.settingsService.runCommand(this.step).subscribe(sh => this.runit = sh)
+  }
+
+  getPrintSchemaCommand() {
+    if(this.step)
+    this.settingsService.printSchemaCommand(this.step).subscribe(sh => this.runit = sh)  
+  }
 
 }

@@ -1,10 +1,16 @@
 <p matLine>
-  <input type="text" size="120" [(ngModel)]="runit" autocomplete="on">      
-  <button mat-button color="basic" matTooltip="Run this command" (click)="runIt(runit)">
+  <input type="text" size="100" [(ngModel)]="runit" autocomplete="on">      
+  <button mat-button color="basic" matTooltip="Run" (click)="runIt(runit)">
     <mat-icon>play_arrow</mat-icon>
   </button>      
+  <button mat-icon-button matTooltip="Go to step" (click)="getRunCommand()">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+  <button mat-icon-button matTooltip="Read schema" (click)="getPrintSchemaCommand()">
+    <mat-icon>segment</mat-icon>
+  </button>
 </p>
-<textarea cols="160" rows="20" disabled>{{filter(run?.log)}}</textarea>        
+<textarea [cols]="cols" [rows]="rows" disabled>{{filter(run?.log)}}</textarea>        
 <button mat-button color="basic" (click)="refreshlog(run)">
     Refresh
     <mat-icon>autorenew</mat-icon>

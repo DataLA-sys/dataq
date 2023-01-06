@@ -31,54 +31,55 @@
         <span>DataQuote</span>
 
         <span class="example-spacer"></span>
-        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-          <mat-icon>share</mat-icon>
-        </button>
+        <mat-button-toggle-group name="env" aria-label="Env" [value]="entityService.env" (change)="onEnvChange($event)">
+          <mat-button-toggle *ngFor="let env of entity.getEnvList()" [value]="env">{{env == "" ? "default" : env}}</mat-button-toggle>
+        </mat-button-toggle-group>
       </mat-toolbar>
 
-      <div fxLayout="row" fxLayoutGap="5px">
-        <div fxFlex="25" style="overflow: auto;height: 88vh;">
-          <app-step-list></app-step-list>
-        </div>
-        <div fxFlex>
-          <mat-tab-group (selectedIndexChange)="selectedIndexChange($event)" [(selectedIndex)]="selectedTabIndex">
-            <mat-tab label="Graph">
-              <div style="overflow: auto;height: 80vh;">
-                <div fxLayout="column" style="width: 100%; height: 100%;" fxLayoutGap="5px">
-                  <div fxFlex #graphContainer>
-                    <app-graph></app-graph>
-                  </div>
-                  <div fxFlex="40vh" style="background-color: #f5f5f5;">
-                    <app-step-props></app-step-props>
+      <div fxLayout="row" fxLayoutGap="5px" style="overflow: auto;height: 88vh;">
+        <as-split direction="horizontal">
+          <as-split-area [size]="25">
+            <app-step-list></app-step-list>
+          </as-split-area>
+          <as-split-area [size]="75">
+            <mat-tab-group (selectedIndexChange)="selectedIndexChange($event)" [(selectedIndex)]="selectedTabIndex">
+              <mat-tab label="Graph">
+                <div style="overflow: auto;height: 80vh;">
+                  <div fxLayout="column" style="width: 100%; height: 100%;" fxLayoutGap="5px">
+                    <as-split direction="vertical">
+                      <as-split-area [size]="60">
+                        <app-graph></app-graph>
+                      </as-split-area>
+                      <as-split-area [size]="40">
+                        <app-step-props-group></app-step-props-group>
+                      </as-split-area>
+                    </as-split>
                   </div>
                 </div>
-              </div>
-            </mat-tab>
-            <mat-tab label="Options">
-              <div style="overflow: auto;height: 80vh;">
-                <app-options [entity]="entity"></app-options>
-              </div>
-            </mat-tab>
-            <mat-tab label="As json (readoly)">
-              <div style="overflow: auto;height: 80vh;">
-                <div ace-editor #editor [(text)]="filebody" [mode]="'json'" [theme]="'eclipse'" [readOnly]="true" style="height:100%;"></div>
-              </div>
-            </mat-tab>
-            <mat-tab label="sh console">
-              <app-commands></app-commands>
-            </mat-tab>
-            <ng-template [ngIf]="openFiles.length > 0">
-            <mat-tab *ngFor="let file of openFiles" [label]="file.name" class="noprint">
-              <ng-template mat-tab-label>
-                <mat-icon (click)="closeFile(file)">close</mat-icon>
-                <mat-icon *ngIf="stepFileIsChanged(file)">circle</mat-icon>
-                {{file.name}}
+              </mat-tab>
+              <mat-tab label="Options">
+                <div style="overflow: auto;height: 80vh;">
+                  <app-options [entity]="entity"></app-options>
+                </div>
+              </mat-tab>
+              <mat-tab label="As json (readoly)">
+                <div style="overflow: auto;height: 80vh;">
+                  <div ace-editor #editor [(text)]="filebody" [mode]="'json'" [theme]="'eclipse'" [readOnly]="true" style="height:100%;"></div>
+                </div>
+              </mat-tab>
+              <ng-template [ngIf]="openFiles.length > 0">
+              <mat-tab *ngFor="let file of openFiles" [label]="file.name" class="noprint">
+                <ng-template mat-tab-label>
+                  <mat-icon (click)="closeFile(file)">close</mat-icon>
+                  <mat-icon *ngIf="stepFileIsChanged(file)">circle</mat-icon>
+                  {{file.name}}
+                </ng-template>
+                <app-open-file [file]="file.name" [step]="file.step"></app-open-file>
+              </mat-tab>
               </ng-template>
-              <app-open-file [file]="file.name" [step]="file.step"></app-open-file>
-            </mat-tab>
-            </ng-template>
-          </mat-tab-group>
-        </div>
+            </mat-tab-group>
+          </as-split-area>
+        </as-split>
       </div>
     </div>
   </mat-drawer-content>

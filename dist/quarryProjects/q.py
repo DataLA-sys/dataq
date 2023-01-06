@@ -84,10 +84,10 @@ def writeStep(stepTo):
         print("schema start " + stepToOrig + " step")
         print(spark.sql("select * from " + stepTo).schema.json())
         print("schema finish " + stepToOrig)
-    else:    
-        spark.sql("select * from " + stepTo).show(100)    
+    else:
+        spark.sql("select * from " + stepTo).show(100)
 
-def interpolate(t):
+def interpolate(t, env):
     data = json.loads(t)
     for option in data["options"]:
         s1 = ""
@@ -103,7 +103,7 @@ def interpolate(t):
                     s2 = value["value"]
         if s1 != "":
             t = t.replace("${" + s1 + "}", s2)
-            
+
     return t
 
 sparkApp = ""
@@ -115,36 +115,22 @@ env = ""
 for arg in sys.argv:
     if "sparkApp=" in arg:
         sparkApp = arg[9:]
+        print(sparkApp)
     if "stepTo=" in arg:
         stepTo = arg[7:]
         stepToOrig = stepTo
-    if "printSchema=true" in arg: 
+        print("stepTo=" + stepTo)
+    if "printSchema=true" in arg:
         printSchema = True
     if "env=" in arg:
         env = arg[4:]
+        print("env=" + env)
 
 f = open(sparkApp)
 t = f.read()
 f.close()
 
-data = json.loads(interpolate(t))
-
-for option in data["options"]:
-    s1 = ""
-    s2 = ""
-    for value in option["value"]:
-        if value["env"] == env:
-            s1 = option["name"]
-            s2 = value["value"]
-    if s1 == "":
-        for value in option["value"]:
-            if value["env"] == "":
-                s1 = option["name"]
-                s2 = value["value"]
-    if s1 != "":
-        t = t.replace("${" + s1 + "}", s2)
-
-data = json.loads(t)
+data = json.loads(interpolate(t, env))
 
 spark = SparkSession.builder\
         .appName(data["name"])\
@@ -166,7 +152,7 @@ targets = findTargets(data)
 fileSources(data)
 
 arrange = arrangeSteps(data)
-           
+
 for step in arrange:
     if step["opt"]["name"] == "SparkSQL":
         sqlFile = ""
@@ -183,7 +169,7 @@ for target in targets:
         for opt in target["opt"]["opts"]:
             if opt["option"] == "path":
                 path = opt["value"].replace("C:", "file:/mnt/c")
-                                    
+
         if stepTo == None:
             spark.sql("select * from " + target["in"][0]).write.parquet(path)
 

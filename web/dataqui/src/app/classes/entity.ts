@@ -23,4 +23,9 @@ export class Entity {
     name!: string;
     steps: Step[] = []
     options: Option[] = []
+    getEnvList(): string[] {
+        let a = new Set(this.options.flatMap(o => o.value.map(v => v.env)))
+        a.add("")
+        return [...a].sort()
+    }
 }

@@ -156,32 +156,6 @@ export class StepOptsComponent implements OnInit, OnChanges {
     }
   }
 
-  run() {
-    this.settingsService.getSettings().subscribe(st => {
-      let s = st.sparkSubmit + " --master local" +
-      " " + st.projects + "/q.py" +
-      " sparkApp=" + st.projects + "/" + this.entityService.getEntity().name + "/" + this.entityService.getEntity().name + ".json" + 
-      " stepTo=" + this.step_?.name
-      if(this.step_) {
-        this.eventsService.emitEventEvent(new Run(s, this.step_?.name))
-      }
-    })
-    
-  }
-
-  printSchema() {
-    this.settingsService.getSettings().subscribe(st => {
-      let s = st.sparkSubmit +  " --master local" +
-      " " + st.projects + "/q.py" +
-      " sparkApp=" + st.projects + "/" + this.entityService.getEntity().name + "/" + this.entityService.getEntity().name + ".json" + 
-      " stepTo=" + this.step_?.name + 
-      " printSchema=true"
-      if(this.step_) {
-        this.eventsService.emitEventEvent(new Run(s, this.step_?.name))
-      }
-    })
-  }
-
   sourcesOpts() {
     if(this.optsTypes) {
       return this.optsTypes.filter((o: any)=>o.type==='source')

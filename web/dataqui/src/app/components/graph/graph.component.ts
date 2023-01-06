@@ -5,6 +5,7 @@ import { EntityService } from 'src/app/services/entity.service';
 import { Entity } from 'src/app/classes/entity';
 import { CenterGraph, EventsService, FitGraph, GraphSize, RedrawGraph, Refresh, Schema, StepSelect } from 'src/app/services/events.service';
 import { Step } from 'src/app/classes/step';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-graph',
@@ -12,8 +13,8 @@ import { Step } from 'src/app/classes/step';
   styleUrls: ['./graph.component.styl']
 })
 export class GraphComponent implements OnInit, OnChanges {
-  x: number = 140;
-  y: number = 100;
+  x: number = 1000;
+  y: number = 1000;
   zoomToFit$: Subject<boolean> = new Subject();
   panToNode$: Subject<any> = new Subject();
   center$: Subject<boolean> = new Subject();
@@ -39,15 +40,16 @@ export class GraphComponent implements OnInit, OnChanges {
     this.center$.next(true)
   }
 
-  constructor(private entityService: EntityService, private eventService: EventsService) { 
+  constructor(private entityService: EntityService, private eventService: EventsService,
+    private sanitizer: DomSanitizer) { 
     this.fillGraphData()
     this.eventService.eventEvent$.subscribe(ev => {if(ev instanceof StepSelect) {this.selected = ev.step}})
     this.eventService.eventEvent$.subscribe(ev => {if(ev instanceof RedrawGraph) {this.fillGraphData()}})
     this.eventService.eventEvent$.subscribe(ev => {
       if(ev instanceof GraphSize) {
         setTimeout(() => {
-          this.y = ev.h - 7;
-          this.x = ev.w;
+          //this.y = ev.h - 7;
+          //this.x = ev.w;
         }, 10)
       }
       if(ev instanceof CenterGraph) { this.center() }
@@ -60,6 +62,13 @@ export class GraphComponent implements OnInit, OnChanges {
         }
       }
     })
+  }
+
+  getSVGImageUrl(image: string) {
+    let base64string = btoa(image);
+    return this.sanitizer.bypassSecurityTrustResourceUrl(
+      `data:image/svg+xml;base64,${base64string}`
+    );
   }
 
   fillGraphData() {

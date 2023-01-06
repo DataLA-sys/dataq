@@ -18,24 +18,19 @@ export class StepListComponent implements OnInit {
   steps: Step[] = []
   selected: Step | undefined
   constructor(private eventService: EventsService, private entityService: EntityService, 
-    iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+    private iconRegistry: MatIconRegistry, private sanitizer: DomSanitizer) {
     this.refresh()
     this.eventService.eventEvent$.subscribe(ev => {if (ev instanceof StepSelect) {this.selected = ev.step}})
     this.eventService.eventEvent$.subscribe(ev => {if (ev instanceof Refresh) this.refresh()})
-    iconRegistry.addSvgIconLiteral('csvSource', sanitizer.bypassSecurityTrustHtml(CSV_SOURCE));
+    entityService.getStepTypes().forEach(s => this.iconRegistry.addSvgIcon(
+      s,
+      this.sanitizer.bypassSecurityTrustResourceUrl(entityService.getStepImage(s))
+    ))
   }
 
   refresh() {
     this.steps = this.entityService.getEntity().steps;
     this.selected = undefined;
-  }
-
-  createOps() {
-
-  }
-
-  a() {
-    alert(this.listSteps.selectedOptions.selected[0]?.value)
   }
 
   ngOnInit(): void {

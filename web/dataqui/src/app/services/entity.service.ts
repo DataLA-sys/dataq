@@ -99,19 +99,23 @@ export class EntityService {
 
     getStepImage(type: string): string {
       if(type === "CsvSource") {
-        return "assets/csv.svg"
+        return "assets/file-csv-svgrepo-com.svg"
       }
       if(type === "ParquetTarget") {
-        return "assets/icon--parquet.png"
+        return "assets/parquet-floor-svgrepo-com.svg"
       }
       if(type === "ParquetSource") {
-        return "assets/icon--parquet.png"
+        return "assets/parquet-floor-svgrepo-com.svg"
       }
       if(type === "JDBCSource") {
-        return "assets/linkedTable.svg"
+        return "assets/database-svgrepo-com.svg"
       }
       
-      return "assets/sql.png"
+      return "assets/sql-database-generic-svgrepo-com.svg"
+    }
+
+    getStepTypes(): string[] {
+      return ["CsvSource", "ParquetTarget", "ParquetSource", "JDBCSource", "SparkSQL"]
     }
 
     getOptType() {
@@ -160,4 +164,13 @@ export class EntityService {
       })
       
     }
+
+    private env_: string = ""
+    get env(): string {
+      return this.env_
+    }
+    set env(value: string) {
+      this.env_ = value
+    }
+
 }

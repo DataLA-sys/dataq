@@ -12,10 +12,11 @@
 <ng-template #nodeTemplate let-node>
     <svg:g class="node-group ng-star-inserted">
         <image [attr.href]="node.data.image" height="40" width="40" fill="none" (click)="nodeClick(node)" fill="#a95963"/>
+        <!-- <img [src]="getSVGImageUrl(node.data.image)" height="40" width="40" fill="none" (click)="nodeClick(node)" fill="#a95963"/> -->
         <ng-container *ngIf="checkIfSelected(node)">
-          <rect height="40" width="40" fill="none" style="stroke:gray; stroke-width:3;"/>
+          <rect height="45" width="45" x="-2.5" y="-2.5" fill="none" style="stroke:navy; stroke-width:3;"/>
         </ng-container>
-        <text class="name">{{ node.data.step.name }}</text>
+        <text class="name" dy="60">{{ node.data.step.name }}</text>
     </svg:g>
 </ng-template>
 

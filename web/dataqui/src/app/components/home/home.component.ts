@@ -7,6 +7,7 @@ import 'brace/mode/json'
 import 'brace/theme/eclipse'
 import * as ace from "ace-builds";
 import { Entity } from 'src/app/classes/entity';
+import { Step } from 'src/app/classes/step';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 
 @Component({
@@ -63,7 +64,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           found = ev
         }
         setTimeout(() => {
-          this.selectedTabIndex = 4 + this.openFiles.indexOf(found || new StepFile("", ""))
+          this.selectedTabIndex = 3 + this.openFiles.indexOf(found || new StepFile("", ""))
           let s = JSON.stringify(this.openFiles)
           this.queryParam('openFiles', s)
         }, 100)
@@ -108,6 +109,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     error => {
       console.log(error)
     })
+    this.entityService.env = ""
     if(this.entity.name == undefined){
       let r = this.route.queryParams.subscribe(params =>{
         if(params['entity']) {
@@ -120,6 +122,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
             if(openFiles){
               let openFilesParsed: StepFile[] = JSON.parse(openFiles)
               this.openFiles = openFilesParsed
+            }
+            if(params['env']) {
+              let env: string = params['env']
+              if(this.entity?.getEnvList().indexOf(env) > -1) {
+                this.entityService.env = env
+              }
             }
           })
         }
@@ -185,5 +193,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   stepFileIsChanged(file: StepFile): boolean {
     let found = this.filesChanged.find(f=>f.name==file.name&&f.step==file.step)
     return found != undefined
+  }
+
+  onEnvChange($event: any) {
+    this.queryParam('env', $event.value)
+    this.entityService.env = $event.value;
   }
 }
