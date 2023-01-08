@@ -55,13 +55,25 @@ q.py читает json конфигурацию приложения.
 Чтобы создать spark приложение, необходимо:
 - создать step
 ![plot](./doc/pic/newstep.png)
+
+step могут быть источники данных (source), sql, приемник данных (target)
+
 - указать их типы и свойства
 ![plot](./doc/pic/stepprops.png)
+
+для источников и приемников их свойста. для sql ссыла на файл sql.
+
 - связать их друг с другом
 ![plot](./doc/pic/steplinks.png)
+
+для step указываются входящие для них. Они доступны в sql по названию
+
 - указать sql
 ![plot](./doc/pic/stepsql.png)
 ![plot](./doc/pic/gosql.png)
 ![plot](./doc/pic/sql.png)
+
 - отладить
 ![plot](./doc/pic/debug.png)
+
+справа вверху можно указать environment если их несколько. здесь запускается spark-submit и показываются логи 
