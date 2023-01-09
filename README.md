@@ -88,3 +88,7 @@ application.conf
 |Ключ|Значение|
 |----|--------|
 |port|Арес порта приложения (8083)|
+|sparkSubmit|Путь до spark-submit|
+|quarryProjects|Путь до папки с проектами|
+|optsFile|Путь до файла с опциями step, список source и target и их опций|
+
