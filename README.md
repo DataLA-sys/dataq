@@ -73,6 +73,9 @@ step могут быть источники данных (source), sql, прие
 ![plot](./doc/pic/gosql.png)
 ![plot](./doc/pic/sql.png)
 
+Все расчеты делаются через sql. В sql step доступны входящие datasets.
+При отладке запускаются все sql на основе собирается step, согласно диаграмме.
+
 - отладить
 ![plot](./doc/pic/debug.png)
 
@@ -90,5 +93,11 @@ application.conf
 |port|Арес порта приложения (8083)|
 |sparkSubmit|Путь до spark-submit|
 |quarryProjects|Путь до папки с проектами|
-|optsFile|Путь до файла с опциями step, список source и target и их опций|
+|optsFile|Файл с опциями step, список source и target и их свойств|
+
+## Запуск и отладка
+
+Для запуска требуется доступ к spark-submit. 
+В простейшем случае можно скачать себе дистрибутив spark на машину.
+В случае Windows его можно положить в Win-Ubuntu.
 
